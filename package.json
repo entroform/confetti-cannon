@@ -1,0 +1,14 @@
+{
+  "name": "confetti-explosion",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "parcel ./source/index.html",
+    "build": "rm -rf ./docs; parcel build ./source/index.html --out-dir docs --public-url ./",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
