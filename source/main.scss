@@ -1,0 +1,53 @@
+@import 'reset';
+
+$color_primary: hsl(340, 100%, 50%);
+$color_primary_hover: hsl(340, 100%, 40%);
+$color_primary_active: hsl(340, 100%, 20%);
+$color_primary_disabled: hsl(340, 0%, 20%);
+
+html {
+  font-family: 'Helvetica Neue', sans-serif;
+}
+
+.container {
+  align-items: center;
+  background-color: black;
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  max-height: 100%;
+  max-width: 100%;
+  position: relative;
+  width: 100vw;
+}
+
+.triggerButton {
+  $_height: 40px;
+
+  background-color: $color_primary;
+  border-radius: $_height;
+  color: white;
+  cursor: pointer;
+  display: block;
+  font-size: 1rem;
+  font-weight: bold;
+  height: $_height;
+  line-height: $_height;
+  padding: 0 4rem;
+
+  transition-duration: 200ms;
+  transition-timing-function: ease-out;
+  transition-property: background-color;
+
+  &:hover {
+    background-color: $color_primary_hover;
+  }
+
+  &:active {
+    background-color: $color_primary_active;
+  }
+
+  &.triggerButton--disabled {
+    background-color: $color_primary_disabled;
+  }
+}

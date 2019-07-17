@@ -1,14 +1,21 @@
 {
   "name": "confetti-explosion",
   "version": "1.0.0",
+  "author": "Andrew Prasetya",
   "description": "",
-  "main": "index.js",
+  "keywords": [],
+  "license": "ISC",
+  "main": "source/main.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/nekobird/collect-coins-animation.git"
+  },
   "scripts": {
     "start": "parcel ./source/index.html",
     "build": "rm -rf ./docs; parcel build ./source/index.html --out-dir docs --public-url ./",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "devDependencies": {
+    "sass": "^1.22.5"
+  }
 }
