@@ -1,7 +1,9 @@
 import Util from './util';
 
 var ANIMATION_DEFAULT_CONFIG = {
-  duration: 1000, // In ms
+  // animation duration in ms, you can set it to 'forever'
+  // if you want it to run until stop is called.
+  duration: 1000,
   delay: 0,
   timingFunction: function(t) { return t },
   onTick: function() {},
@@ -37,8 +39,10 @@ Animation.prototype = {
       var now = Date.now();
       this.progress = (now - this.timeStart) / this.config.duration;
       if (this.progress > 1) this.progress = 1;
-    } else {
+    } else if (this.config.duration === 'forever') {
       this.progress = 0;
+    } else {
+      this.progress = 1;
     }
   },
   loop: function() {

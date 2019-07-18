@@ -31,11 +31,10 @@ var Util = {
     if (typeof to === 'number') to = [0, to];
     var percent = (number - from[0]) / (from[1] - from[0]);
     var result;
-    if (to[1] > to[0]) {
+    if (to[1] > to[0])
       result = percent * (to[1] - to[0]) + to[0];
-    } else {
+    else
       result = to[0] - (percent * (to[0] - to[1]));
-    }
     return result;
   },
   getEuclideanDistance: function(a, b) {
@@ -69,11 +68,10 @@ var Util = {
     if (typeof fixed === 'undefined') fixed = 2;
     if (typeof range === 'number') range = [0, range];
     if (range[0] === 0 && range[1] === 1) {
-      if (whole === true) {
+      if (whole === true)
         return Math.floor(Math.random() * 2);
-      } else {
+      else
         return parseFloat(Math.random().toFixed(fixed));
-      }
     } else {
       let number = this.modulate(Math.random(), 1, range, false);
       return parseInt((number).toFixed(0), 10);
