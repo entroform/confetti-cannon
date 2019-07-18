@@ -30,11 +30,14 @@ var confettiCannon = new ConfettiCannon({
   // angle: 0,
   blastArc: Math.PI / 3,
 
+  // Power Ranger
   powerRange: [4, 50],
 
   gravity: 1,
+
   frictionCoefficient: 1,
-  // Keep this zero for now.
+
+  // Keep this zero unless you want death.
   dragCoefficient: 0,
 
   beforeFire: function() {
@@ -52,4 +55,8 @@ var confettiCannon = new ConfettiCannon({
 
 triggerElement.addEventListener('click', function() {
   confettiCannon.fire();
+}.bind(this));
+
+window.addEventListener('resize', function() {
+  confettiCannon.config.firePosition.equals(getElementCenterVector(triggerElement));
 }.bind(this));

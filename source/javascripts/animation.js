@@ -3,8 +3,8 @@ import Util from './util';
 var ANIMATION_DEFAULT_CONFIG = {
   // Animation duration is in ms.
   // You can also set it to 'forever'
-  // if you want it to run indefinitely until
-  // stop() is called.
+  // if you want it to run indefinitely
+  // until stop() is called.
   duration: 1000,
   delay: 0,
   timingFunction: function(t) { return t },
@@ -83,10 +83,10 @@ Animation.prototype = {
     if (this.isActive === true) {
       window.cancelAnimationFrame(this.rafID);
       clearTimeout(this.timeoutID);
-      this.isAnimating = false;
-      this.isActive = false;
       this.timeEnd = Date.now();
       this.progress = 0;
+      this.isAnimating = false;
+      this.isActive = false;
       this.config.onComplete(this);
     }
   },
