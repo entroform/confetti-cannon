@@ -14,13 +14,16 @@ var triggerElement = document.querySelector('.triggerButton');
 
 var confettiCannon = new ConfettiCannon({
   parentElement: containerElement,
-  firePosition: getElementCenterVector(triggerElement),
+  resolutionMultiplier: 2,
 
   colorChoices: ['#80EAFF', '#FF0055', '#00FFAA', '#FFFF00'],
-  numberOfConfetti: 500,
   widthRange: [2, 10],
   heightRange: [2, 10],
   lifeSpanRange: [100, 250],
+
+  // Cannon Settings
+  firePosition: getElementCenterVector(triggerElement),
+  numberOfConfetti: 500,
 
   delay: 200,
   // angle: Math.PI,
@@ -31,14 +34,17 @@ var confettiCannon = new ConfettiCannon({
   blastArc: Math.PI / 3,
 
   // Power Ranger
-  powerRange: [4, 50],
+  powerRange: [10, 50],
 
   gravity: 1,
-
-  frictionCoefficient: 1,
-
-  // Keep this zero unless you want death.
+  // Please don't set this higher or equal to gravity value.
+  frictionCoefficient: 0.9,
+  // Keep this zero.
   dragCoefficient: 0,
+
+  // Simplex lateral entropy settings.
+  simplexZoomMultiplierRange: [80, 120],
+  simplexOffsetMultiplier: 100,
 
   beforeFire: function() {
     triggerElement.classList.add('triggerButton--disabled');

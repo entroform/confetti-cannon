@@ -27,6 +27,8 @@ var CONFETTI_CANNON_DEFAULT_CONFIG = {
   gravity: 1,
   frictionCoefficient: 0.1,
   dragCoefficient: 0.01,
+  simplexZoomMultiplierRange: [80, 100],
+  simplexOffsetMultiplier: 100,
 
   // Hooks
   beforeFire: function() {},
@@ -88,10 +90,15 @@ ConfettiCannon.prototype = {
         .rotateTo(this.config.angle)
         .rotateBy(Util.modulate(Math.random(), 1, [-this.config.blastArc / 2, this.config.blastArc / 2]))
         .multiply(Util.modulate(Math.random(), 1, this.config.powerRange)),
-      mass: 1,
+
       width: Util.modulate(Math.random(), 1, this.config.widthRange),
       height: Util.modulate(Math.random(), 1, this.config.heightRange),
       dragCoefficient: this.config.dragCoefficient,
+
+      simplexZoomMultiplier: Util.modulate(Math.random(), 1, this.config.simplexZoomMultiplierRange),
+      simplexXOffset: Math.random() * this.config.simplexOffsetMultiplier,
+      simplexYOffset: Math.random() * this.config.simplexOffsetMultiplier,
+
     };
   },
   // 9) Create canvas element and calculate offset. Takes in a callback (begin method).
@@ -145,23 +152,19 @@ ConfettiCannon.prototype = {
   update: function() {
     this.clearCanvas();
 
-    var m = this.config.resolutionMultiplier;
     var deadConfetti = 0;
     var gravity = new Vector2(0, this.config.gravity);
     for (var i = 0; i < this.confetti.length; i++) {
       if (this.confetti[i].isAlive === true) {
-        // TODO: Clean up this lateral oscillation force.
-        var a = Util.modulate(i, this.confetti.length, [0, 10]);
-        this.confetti[i].applyForce(
-          new Vector2(
-            Math.cos(this.updateCount / (15 - a) + (i * 11)), 0
-          )
-        );
-        this.confetti[i].applyForce(gravity);
         this.confetti[i].applyFriction(this.config.frictionCoefficient);
         this.confetti[i].applyDrag();
+        this.confetti[i].applyForce(gravity);
+        this.confetti[i].applyLateralEntropy(this.updateCount);
         this.confetti[i].update();
-        this.confetti[i].draw(this.context);
+        this.confetti[i].draw(this.context, this.config.resolutionMultiplier);
+
+        if (this.confetti[i].position.y + this.confetti[i].config.height > this.canvasElement.height)
+          this.confetti[i].die();
       } else {
         deadConfetti++;
       }

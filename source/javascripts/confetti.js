@@ -1,5 +1,6 @@
 import Util from './util';
 import Vector2 from './vector2';
+import SimplexNoise from './noise';
 
 // @Confetti
 var CONFETTI_DEFAULT_CONFIG = {
@@ -16,6 +17,10 @@ var CONFETTI_DEFAULT_CONFIG = {
 
   frictionCoefficient: 0,
   dragCoefficient: 0,
+
+  simplexZoomMultiplier: 100,
+  simplexXOffset: 0,
+  simplexYOffset: 0,
 };
 
 var Confetti = function(config) {
@@ -38,6 +43,8 @@ Confetti.prototype = {
     this.angle = 0.1;
     this.angleVelocity = 0.4;
     this.angleAcceleration = 0;
+
+    this.simplex = new SimplexNoise();
   },
   // 2) Set coin config.
   setConfig: function(config) {
@@ -56,6 +63,16 @@ Confetti.prototype = {
     var dragMagnitude = this.config.dragCoefficient * speed * speed;
     var force = this.velocity.clone().multiply(-1).normalize().multiply(dragMagnitude);
     this.applyForce(force);
+  },
+  applyLateralEntropy: function(t) {
+    var zoom = this.config.simplexZoomMultiplier;
+    if (zoom === 0) zoom = 1;
+    var x = this.simplex.noise(
+      this.config.simplexXOffset + (t / zoom),
+      this.config.simplexYOffset
+    );
+    var lateralOscillation = new Vector2(x, 0);
+    this.applyForce(lateralOscillation);
   },
   applyForce: function(force) {
     force.divide(this.config.mass);
@@ -76,10 +93,13 @@ Confetti.prototype = {
     this.angle += this.angleVelocity;
     return this;
   },
-  draw: function(context) {
+  draw: function(context, m) {
 
-    var x = this.position.x;
-    var y = this.position.y;
+    var x = this.position.x * m;
+    var y = this.position.y * m;
+
+    var w = this.config.width * m;
+    var h = this.config.height * m;
 
     context.save();
 
@@ -90,10 +110,10 @@ Confetti.prototype = {
 
     context.beginPath();
     
-    context.moveTo(x, y);
-    context.lineTo(x + this.config.width, y);
-    context.lineTo(x + this.config.width, y + this.config.height);
-    context.lineTo(x, y + this.config.height);
+    context.moveTo(x - (w / 2), y - (h / 2));
+    context.lineTo(x + (w / 2), y - (h / 2));
+    context.lineTo(x + (w / 2), y + (h / 2));
+    context.lineTo(x - (w / 2), y + (h / 2));
 
     context.fillStyle = this.config.color;
     context.fill();
