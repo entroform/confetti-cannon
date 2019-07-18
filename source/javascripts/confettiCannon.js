@@ -26,7 +26,7 @@ var CONFETTI_CANNON_DEFAULT_CONFIG = {
   // Environment Settings
   gravity: 1,
   frictionCoefficient: 0.1,
-  dragCoefficient: 0.01,
+  dragCoefficient: 0,
   simplexZoomMultiplierRange: [80, 100],
   simplexOffsetMultiplier: 100,
 
@@ -135,7 +135,6 @@ ConfettiCannon.prototype = {
   },
   // 11) Initialize animation object and start it.
   startAnimation: function() {
-    console.log('confettiCannon: startAnimation');
     this.updateCount = 0;
     this.config.beforeFire(this);
     this.animation = new Animation({
@@ -178,7 +177,6 @@ ConfettiCannon.prototype = {
   },
   // 15) This is called after the last coin reached the end. Or if numberOfCoins is 0. Sayonara!
   end: function() {
-    console.log('confettiCannon: end');
     this.clearCanvas();
     this.animation.stop();
     this.canvasElement.remove();
