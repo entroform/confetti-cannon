@@ -31,6 +31,7 @@ var confettiCannon = new ConfettiCannon({
 
   gravity: 1,
   frictionCoefficient: 0.9,
+  dragCoefficient: 0.0011,
 
   onStart: function() {
     triggerElement.classList.add('triggerButton--disabled');

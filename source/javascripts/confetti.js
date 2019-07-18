@@ -10,6 +10,7 @@ var CONFETTI_DEFAULT_CONFIG = {
   startPosition: new Vector2(),
   startVelocity: new Vector2(),
   frictionCoefficient: 0,
+  dragCoefficient: 0,
 };
 
 var Confetti = function(config) {
@@ -28,6 +29,10 @@ Confetti.prototype = {
     this.position = new Vector2().equals(this.config.startPosition);
     this.velocity = new Vector2().equals(this.config.startVelocity);
     this.acceleration = new Vector2();
+
+    this.angle = 0;
+    this.angleVelocity = 0;
+    this.angleAcceleration = 0;
   },
   // 2) Set coin config.
   setConfig: function(config) {
@@ -37,9 +42,15 @@ Confetti.prototype = {
   applyFriction: function(frictionCoefficient) {
     var friction = typeof frictionCoefficient === 'number' ? frictionCoefficient : this.config.frictionCoefficient;
     if (friction !== 0) {
-      var force = new Vector2().equals(this.velocity).normalize().multiply(-friction);
+      var force = this.velocity.clone().multiply(-1).normalize().multiply(friction);
       this.applyForce(force);
     }
+  },
+  applyDrag: function() {
+    var speed = this.velocity.magnitude();
+    var dragMagnitude = this.config.dragCoefficient * speed * speed;
+    var force = this.velocity.clone().multiply(-1).normalize().multiply(dragMagnitude);
+    this.applyForce(force);
   },
   applyForce: function(force) {
     force.divide(this.config.mass);
@@ -54,6 +65,10 @@ Confetti.prototype = {
       .limit(this.config.maximumSpeed);
     this.position.add(this.velocity);
     this.acceleration.multiply(0);
+
+    this.angleVelocity += this.angleAcceleration;
+    // this.angleVelocity = constrain(angleVelocity, [-0.1, 0.1]);
+    this.angle += this.angleVelocity;
     return this;
   },
   draw: function(context) {

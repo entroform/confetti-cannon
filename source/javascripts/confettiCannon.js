@@ -20,7 +20,8 @@ var CONFETTI_CANNON_DEFAULT_CONFIG = {
   powerRange: [2, 40],
 
   gravity: 1,
-  frictionCoefficient: 0.9,
+  frictionCoefficient: 0.1,
+  dragCoefficient: 0.01,
 
   onStart: function() {},
   onFire: function() {},
@@ -83,6 +84,7 @@ ConfettiCannon.prototype = {
         .multiply(Util.modulate(Math.random(), 1, this.config.powerRange)),
       mass: 1,
       radius: Util.modulate(Math.random(), 1, [2, 6]),
+      dragCoefficient: this.config.dragCoefficient,
     };
   },
   // 9) Create canvas element and calculate offset. Takes in a callback (begin method).
@@ -150,6 +152,7 @@ ConfettiCannon.prototype = {
         );
         this.confetti[i].applyForce(gravity);
         this.confetti[i].applyFriction(this.config.frictionCoefficient);
+        this.confetti[i].applyDrag();
         this.confetti[i].update();
         this.confetti[i].draw(this.context);
       } else {
