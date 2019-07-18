@@ -3,12 +3,17 @@ import Vector2 from './vector2';
 
 // @Confetti
 var CONFETTI_DEFAULT_CONFIG = {
-  colorChoices: ['red', 'green', 'blue', 'white'],
-  radius: 20,
+  color: 'white',
+
+  height: 20,
+  width: 20,
+
   mass: 1,
   life: 100,
+
   startPosition: new Vector2(),
   startVelocity: new Vector2(),
+
   frictionCoefficient: 0,
   dragCoefficient: 0,
 };
@@ -30,8 +35,8 @@ Confetti.prototype = {
     this.velocity = new Vector2().equals(this.config.startVelocity);
     this.acceleration = new Vector2();
 
-    this.angle = 0;
-    this.angleVelocity = 0;
+    this.angle = 0.1;
+    this.angleVelocity = 0.4;
     this.angleAcceleration = 0;
   },
   // 2) Set coin config.
@@ -67,21 +72,37 @@ Confetti.prototype = {
     this.acceleration.multiply(0);
 
     this.angleVelocity += this.angleAcceleration;
-    // this.angleVelocity = constrain(angleVelocity, [-0.1, 0.1]);
+    this.angleVelocity = Util.constrain(this.angleVelocity, [-0.1, 0.1]);
     this.angle += this.angleVelocity;
     return this;
   },
   draw: function(context) {
+
+    var x = this.position.x;
+    var y = this.position.y;
+
+    context.save();
+
+    context.translate(x, y);
+    context.rotate(this.angle);
+    context.transform(1, 0, 0, 1, 0, 0);
+    context.translate(-x, -y);
+
     context.beginPath();
-    context.arc(
-      this.position.x,
-      this.position.y,
-      this.config.radius,
-      0,
-      Math.PI * 2
-    );
+    
+    context.moveTo(x, y);
+    context.lineTo(x + this.config.width, y);
+    context.lineTo(x + this.config.width, y + this.config.height);
+    context.lineTo(x, y + this.config.height);
+
     context.fillStyle = this.config.color;
     context.fill();
+
+    context.restore();
+  },
+  die: function() {
+    this.life = 0;
+    this.isAlive = false;
   },
 }
 

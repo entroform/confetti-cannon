@@ -18,6 +18,9 @@ var confettiCannon = new ConfettiCannon({
 
   colorChoices: ['#80EAFF', '#FF0055', '#00FFAA', '#FFFF00'],
   numberOfConfetti: 500,
+  widthRange: [2, 10],
+  heightRange: [2, 10],
+  lifeSpanRange: [100, 250],
 
   delay: 200,
   // angle: Math.PI,
@@ -25,15 +28,16 @@ var confettiCannon = new ConfettiCannon({
   angle: 3 * Math.PI / 2,
   // angle: Math.PI * 2 - Math.PI / 4,
   // angle: 0,
-  blastArc: Math.PI / 2,
+  blastArc: Math.PI / 3,
 
-  powerRange: [4, 40],
+  powerRange: [4, 50],
 
   gravity: 1,
-  frictionCoefficient: 0.9,
-  dragCoefficient: 0.0011,
+  frictionCoefficient: 1,
+  // Keep this zero for now.
+  dragCoefficient: 0,
 
-  onStart: function() {
+  beforeFire: function() {
     triggerElement.classList.add('triggerButton--disabled');
     triggerElement.textContent = 'Steady...';
   },

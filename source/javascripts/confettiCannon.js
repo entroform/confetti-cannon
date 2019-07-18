@@ -4,26 +4,32 @@ import Animation from './animation';
 import Confetti from './confetti';
 
 var CONFETTI_CANNON_DEFAULT_CONFIG = {
+  // Canvas Settings
   parentElement: null,
   resolutionMultiplier: 1,
   zIndex: 0,
 
+  // Confetti settings
+  colorChoices: ['#80EAFF', '#FF0055', '#00FFAA', '#FFFF00'],
+  widthRange: [2, 8],
+  heightRange: [2, 10],
+  lifeSpanRange: [100, 200],
+
+  // Cannon Settings
   firePosition: new Vector2(),
-
-  colorChoices: ['#80EAFF', '#FF0055', '#00FFAA', '#FFFF00'],  
   numberOfConfetti: 500,
-
   delay: 0,
   angle: 3 * Math.PI / 2,
   blastArc: Math.PI / 2,
-
   powerRange: [2, 40],
 
+  // Environment Settings
   gravity: 1,
   frictionCoefficient: 0.1,
   dragCoefficient: 0.01,
 
-  onStart: function() {},
+  // Hooks
+  beforeFire: function() {},
   onFire: function() {},
   onComplete: function() {},
 };
@@ -75,7 +81,7 @@ ConfettiCannon.prototype = {
   generateConfettiConfig: function() {
     return {
       color: Util.randomChoice(this.config.colorChoices),
-      life: Util.modulate(Math.random(), 1, [140, 200]),
+      life: Util.modulate(Math.random(), 1, this.config.lifeSpanRange),
       startPosition: new Vector2().equals(this.config.firePosition),
       startVelocity: new Vector2(1, 1)
         .normalize()
@@ -83,7 +89,8 @@ ConfettiCannon.prototype = {
         .rotateBy(Util.modulate(Math.random(), 1, [-this.config.blastArc / 2, this.config.blastArc / 2]))
         .multiply(Util.modulate(Math.random(), 1, this.config.powerRange)),
       mass: 1,
-      radius: Util.modulate(Math.random(), 1, [2, 6]),
+      width: Util.modulate(Math.random(), 1, this.config.widthRange),
+      height: Util.modulate(Math.random(), 1, this.config.heightRange),
       dragCoefficient: this.config.dragCoefficient,
     };
   },
@@ -123,12 +130,12 @@ ConfettiCannon.prototype = {
   startAnimation: function() {
     console.log('confettiCannon: startAnimation');
     this.updateCount = 0;
-    this.config.onStart();
+    this.config.beforeFire(this);
     this.animation = new Animation({
       delay: this.config.delay,
       duration: 'forever',
       onStart: function() {
-        this.config.onFire()
+        this.config.onFire(this);
       }.bind(this),
       onTick: this.update.bind(this),
     });

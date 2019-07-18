@@ -16,6 +16,17 @@ var Util = {
   cubicBezier: function(t, p1, cp1, cp2, p2) {
     return Math.pow(1 - t, 3) * p1 + 3 * t * Math.pow(1 - t, 2) * cp1 + 3 * t * t * (1 - t) * cp2 + t * t * t * p2;
   },
+  constrain(value, range) {
+    if (typeof range === 'number') range = [0, range];
+
+    const max = Math.max(range[0], range[1]);
+    const min = Math.min(range[0], range[1]);
+
+    if (value >= max) return max;
+    else if (value <= min) return min;
+
+    return value;
+  },
   hypotenuse: function(x, y) {
     var max = Math.max(Math.abs(x), Math.abs(y));
     if (max === 0) max = 1;
