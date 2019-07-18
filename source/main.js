@@ -515,10 +515,10 @@ var containerElement = document.querySelector('.container');
 var triggerElement = document.querySelector('.triggerButton');
 
 var confettiCannon = new ConfettiCannon({
-  colorChoices: ['#80EAFF', '#FF0055', '#00FFAA', '#FFFF00'],
   parentElement: containerElement,
   startPosition: getElementCenterVector(triggerElement),
 
+  colorChoices: ['#80EAFF', '#FF0055', '#00FFAA', '#FFFF00'],
   numberOfConfetti: 500,
   angle: Math.PI + Math.PI / 2,
   blastArc: Math.PI / 2,
