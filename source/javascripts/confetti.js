@@ -109,7 +109,7 @@ Confetti.prototype = {
     context.translate(-x, -y);
 
     context.beginPath();
-    
+
     context.moveTo(x - (w / 2), y - (h / 2));
     context.lineTo(x + (w / 2), y - (h / 2));
     context.lineTo(x + (w / 2), y + (h / 2));

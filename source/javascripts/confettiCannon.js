@@ -1,6 +1,6 @@
 import Util from './util';
 import Vector2 from './vector2';
-import Animation from './animation';  
+import Animation from './animation';
 import Confetti from './confetti';
 
 var CONFETTI_CANNON_DEFAULT_CONFIG = {
@@ -31,18 +31,18 @@ var CONFETTI_CANNON_DEFAULT_CONFIG = {
   simplexOffsetMultiplier: 100,
 
   // Hooks
-  beforeFire: function() {},
-  onFire: function() {},
-  onComplete: function() {},
+  beforeFire: function () {},
+  onFire: function () {},
+  onComplete: function () {},
 };
 
-var ConfettiCannon = function(config) {
+var ConfettiCannon = function (config) {
   this.init(config);
 };
 
 ConfettiCannon.prototype = {
   // 1) Initialize properties and stuff.
-  init: function(config) {
+  init: function (config) {
     this.config = Util.objectAssign({}, CONFETTI_CANNON_DEFAULT_CONFIG);
     this.setConfig(config);
 
@@ -52,19 +52,19 @@ ConfettiCannon.prototype = {
     this.updateCount = 0;
   },
   // 2) Set config.
-  setConfig: function(config) {
+  setConfig: function (config) {
     if (typeof config === 'object') Util.objectAssign(this.config, config);
     if (this.config.numberOfConfetti < 0) this.config.numberOfConfetti = 0;
     if (this.config.resolutionMultiplier < 1) this.config.resolutionMultiplier = 1;
     if (this.config.delay < 0) this.config.delay = 0;
   },
   // 3) Trigger Start.
-  fire: function() {
+  fire: function () {
     this.setup();
     this.begin();
   },
   // 4) Setup target vectors, initialize coin objects, and create canvas.
-  setup: function(callback) {
+  setup: function (callback) {
     if (this.isActive === false) {
       this.isActive = true;
       this.populate();
@@ -72,7 +72,7 @@ ConfettiCannon.prototype = {
     }
   },
   // 7) Prepare, calculate, and initialize confetti objects.
-  populate: function() {
+  populate: function () {
     this.confetti = [];
     for (var i = 0; i < this.config.numberOfConfetti; i++) {
       var config = this.generateConfettiConfig();
@@ -80,7 +80,7 @@ ConfettiCannon.prototype = {
     }
   },
   // 8) This factory function generates config for each coin object.
-  generateConfettiConfig: function() {
+  generateConfettiConfig: function () {
     return {
       color: Util.randomChoice(this.config.colorChoices),
       life: Util.modulate(Math.random(), 1, this.config.lifeSpanRange),
@@ -102,7 +102,7 @@ ConfettiCannon.prototype = {
     };
   },
   // 9) Create canvas element and calculate offset. Takes in a callback (begin method).
-  createCanvas: function() {
+  createCanvas: function () {
     if (typeof this.canvasElement === 'undefined') {
       this.canvasElement = document.createElement('CANVAS');
 
@@ -110,7 +110,7 @@ ConfettiCannon.prototype = {
       this.canvasElement.style.zIndex = this.config.zIndex.toString();
 
       this.canvasElement.style.left = '0px';
-      this.canvasElement.style.top  = '0px';
+      this.canvasElement.style.top = '0px';
 
       this.updateCanvasDimension();
 
@@ -120,27 +120,27 @@ ConfettiCannon.prototype = {
         this.config.parentElement.appendChild(this.canvasElement);
     }
   },
-  updateCanvasDimension: function() {
-    this.canvasElement.style.width  = window.innerWidth  + 'px';
+  updateCanvasDimension: function () {
+    this.canvasElement.style.width = window.innerWidth + 'px';
     this.canvasElement.style.height = window.innerHeight + 'px';
-    this.canvasElement.width  = window.innerWidth  * this.config.resolutionMultiplier;
+    this.canvasElement.width = window.innerWidth * this.config.resolutionMultiplier;
     this.canvasElement.height = window.innerHeight * this.config.resolutionMultiplier;
   },
   // 10) This is called once canvasElement is defined and is in the DOM. Start animation!
-  begin: function() {
+  begin: function () {
     if (this.isActive === true) {
       this.startAnimation();
       if (this.confetti.length === 0) this.end();
     }
   },
   // 11) Initialize animation object and start it.
-  startAnimation: function() {
+  startAnimation: function () {
     this.updateCount = 0;
     this.config.beforeFire(this);
     this.animation = new Animation({
       delay: this.config.delay,
       duration: 'forever',
-      onStart: function() {
+      onStart: function () {
         this.config.onFire(this);
       }.bind(this),
       onTick: this.update.bind(this),
@@ -148,7 +148,7 @@ ConfettiCannon.prototype = {
     this.animation.play();
   },
   // 12) Loop through each coins and draw them.
-  update: function() {
+  update: function () {
     this.clearCanvas();
 
     var deadConfetti = 0;
@@ -172,11 +172,11 @@ ConfettiCannon.prototype = {
     if (deadConfetti === this.confetti.length) this.end();
   },
   // 13) Helper function to clear canvas every frame.
-  clearCanvas: function() {
+  clearCanvas: function () {
     this.context.clearRect(0, 0, this.canvasElement.width, this.canvasElement.height);
   },
   // 15) This is called after the last coin reached the end. Or if numberOfCoins is 0. Sayonara!
-  end: function() {
+  end: function () {
     this.clearCanvas();
     this.animation.stop();
     this.canvasElement.remove();

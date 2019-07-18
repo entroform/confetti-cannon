@@ -1,11 +1,11 @@
 import Vector2 from './vector2';
 import ConfettiCannon from './confettiCannon';
 
-var getElementCenterVector = function(element) {
+var getElementCenterVector = function (element) {
   var rect = element.getBoundingClientRect();
   return new Vector2(
-    rect.left + (rect.width  / 2),
-    rect.top  + (rect.height / 2),
+    rect.left + (rect.width / 2),
+    rect.top + (rect.height / 2),
   );
 };
 
@@ -46,23 +46,23 @@ var confettiCannon = new ConfettiCannon({
   simplexZoomMultiplierRange: [80, 120],
   simplexOffsetMultiplier: 100,
 
-  beforeFire: function() {
+  beforeFire: function () {
     triggerElement.classList.add('triggerButton--disabled');
     triggerElement.textContent = 'Steady...';
   },
-  onFire: function() {
+  onFire: function () {
     triggerElement.textContent = 'Reloading...';
   },
-  onComplete: function() {
+  onComplete: function () {
     triggerElement.classList.remove('triggerButton--disabled');
     triggerElement.textContent = 'Fire!';
   },
 });
 
-triggerElement.addEventListener('click', function() {
+triggerElement.addEventListener('click', function () {
   confettiCannon.fire();
 }.bind(this));
 
-window.addEventListener('resize', function() {
+window.addEventListener('resize', function () {
   confettiCannon.config.firePosition.equals(getElementCenterVector(triggerElement));
 }.bind(this));
