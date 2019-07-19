@@ -34,6 +34,8 @@ html {
   height: $_height;
   line-height: $_height;
   padding: 0 4rem;
+  position: relative;
+  z-index: 50;
 
   transition-duration: 200ms;
   transition-timing-function: ease-out;
@@ -53,7 +55,7 @@ html {
 }
 
 .controls {
-  background-color: hsl(240, 10%, 10%);
+  background-color: hsla(240, 10%, 10%, 0.4);
   box-sizing: border-box;
   min-height: 100vh;
   min-width: 300px;
@@ -61,6 +63,7 @@ html {
   position: fixed;
   right: 0;
   top: 0;
+  z-index: 100;
 }
 
 .control__group {
@@ -71,6 +74,12 @@ html {
 
 .sliderControl {
   width: 100%;
+
+  &:hover {
+    .sliderControl__track {
+      background-color: hsl(240, 10%, 10%);
+    }
+  }
 }
 
 .sliderControl__label {
@@ -82,13 +91,20 @@ html {
 
 .sliderControl__track {
   background-color: hsl(240, 10%, 5%);
+  border-radius: 4px;
   position: relative;
   height: 20px;
   width: 100%;
+
+  transition-duration: 200ms;
+  transition-timing-function: ease-out;
+  transition-property: background-color;
 }
 
 .sliderControl__knob {
   background-color: $color_primary;
+  border-radius: 4px;
+  cursor: pointer;
   position: absolute;
   left: 0px;
   top: 0px;
@@ -101,6 +117,7 @@ html {
 
   &:active {
     background-color: $color_primary_active;
+    cursor: grabbing;
   }
 }
 
@@ -110,4 +127,16 @@ html {
   font-weight: bold;
   line-height: 2;
   letter-spacing: 1px;
+}
+
+canvas.confettiCannonIndicator {
+  display: block;
+  height: 100vh;
+  left: 0;
+  max-height: 100%;
+  max-width: 100%;
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  z-index: 0;
 }

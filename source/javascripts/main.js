@@ -1,3 +1,4 @@
+import Util from './util';
 import Vector2 from './vector2';
 import ConfettiCannon from './confettiCannon';
 
@@ -67,9 +68,11 @@ window.addEventListener('resize', function () {
   confettiCannon.config.firePosition.equals(getElementCenterVector(triggerElement));
 }.bind(this));
 
-// Controls
+// @indicator
+
+
+// @controls
 import SliderControl from './controls/slider';
-import Util from './util';
 
 new SliderControl({
   sliderControlElement: document.getElementById('cc_angle'),
@@ -128,6 +131,26 @@ new SliderControl({
     var value = slider.getValue();
     confettiCannon.config.powerRange = [10, value];
     slider.valueElement.textContent = (value).toFixed(2);
+  },
+});
+
+new SliderControl({
+  sliderControlElement: document.getElementById('cc_numberOfConfetti'),
+
+  trackClassName: 'sliderControl__track',
+  knobClassName: 'sliderControl__knob',
+  valueClassName: 'sliderControl__value',
+
+  transformValue: function(value) {
+    return Util.modulate(value, 1, [50, 10000]);
+  },
+  onInit: function (slider) {
+    slider.setValue(Util.modulate(500, [50, 10000], 1));
+  },
+  onUpdate: function (slider) {
+    var value = slider.getValue();
+    confettiCannon.config.numberOfConfetti = Math.floor(value);
+    slider.valueElement.textContent = Math.floor(value);
   },
 });
 

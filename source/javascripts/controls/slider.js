@@ -97,7 +97,7 @@ SliderControl.prototype = {
     return false;
   },
   listen: function() {
-    window.addEventListener('mousedown', this.eventHandlerMouseDown.bind(this));
+    this.knobElement.addEventListener('mousedown', this.eventHandlerMouseDown.bind(this));
     window.addEventListener('mousemove', this.eventHandlerMouseMove.bind(this));
     window.addEventListener('mouseup',   this.eventHandlerMouseUp.bind(this));
   },
