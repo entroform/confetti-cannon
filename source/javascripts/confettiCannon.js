@@ -140,7 +140,7 @@ ConfettiCannon.prototype = {
     this.canvasElement.width = window.innerWidth * this.config.resolutionMultiplier;
     this.canvasElement.height = window.innerHeight * this.config.resolutionMultiplier;
   },
-  getElementVectorRelativeToCanvas: function (element) {
+  getElementCenterVectorRelativeToCanvas: function (element) {
     var canvasRect = this.canvasElement.getBoundingClientRect();
     var elementRect = element.getBoundingClientRect();
     var x = (elementRect.left - canvasRect.left) + (elementRect.width / 2);
