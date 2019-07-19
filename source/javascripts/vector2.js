@@ -101,6 +101,12 @@ Vector2.prototype = {
   getDistanceTo: function (to) {
     return Vector2.subtract(this, to).magnitude();
   },
+  polarTranslateTo: function (angle, to) {
+    
+  },
+  polarTranslateBy: function (angle, by) {
+
+  },
 };
 
 Vector2.isPoint = function (p) {
