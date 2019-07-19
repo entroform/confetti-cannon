@@ -111,7 +111,7 @@ ConfettiCannon.prototype = {
     if (typeof this.canvasElement === 'undefined') {
       this.canvasElement = document.createElement('CANVAS');
 
-      this.canvasElement.style.position = 'absolute';
+      this.canvasElement.style.position = 'fixed';
       this.canvasElement.style.zIndex = this.config.zIndex.toString();
 
       this.canvasElement.style.left = '0px';
