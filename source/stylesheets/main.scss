@@ -51,3 +51,63 @@ html {
     background-color: $color_primary_disabled;
   }
 }
+
+.controls {
+  background-color: hsl(240, 10%, 10%);
+  box-sizing: border-box;
+  min-height: 100vh;
+  min-width: 300px;
+  padding: 20px;
+  position: fixed;
+  right: 0;
+  top: 0;
+}
+
+.control__group {
+  margin-bottom: 20px;
+}
+
+// SliderControl
+
+.sliderControl {
+  width: 100%;
+}
+
+.sliderControl__label {
+  color: hsl(340, 0%, 90%);
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 2;
+}
+
+.sliderControl__track {
+  background-color: hsl(240, 10%, 5%);
+  position: relative;
+  height: 20px;
+  width: 100%;
+}
+
+.sliderControl__knob {
+  background-color: $color_primary;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  height: 20px;
+  width: 10px;
+
+  transition-duration: 0.2s;
+  transition-timing-function: ease-out;
+  transition-property: background-color;
+
+  &:active {
+    background-color: $color_primary_active;
+  }
+}
+
+.sliderControl__value {
+  color: hsl(240, 10%, 60%);
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 2;
+  letter-spacing: 1px;
+}

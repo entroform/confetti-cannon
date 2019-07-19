@@ -66,3 +66,87 @@ triggerElement.addEventListener('click', function () {
 window.addEventListener('resize', function () {
   confettiCannon.config.firePosition.equals(getElementCenterVector(triggerElement));
 }.bind(this));
+
+// Controls
+import SliderControl from './controls/slider';
+import Util from './util';
+
+new SliderControl({
+  sliderControlElement: document.getElementById('cc_angle'),
+
+  trackClassName: 'sliderControl__track',
+  knobClassName: 'sliderControl__knob',
+  valueClassName: 'sliderControl__value',
+
+  transformValue: function(value) {
+    return Util.modulate(value, 1, [0, Math.PI * 2]);
+  },
+  onInit: function (slider) {
+    slider.setValue(Util.modulate(3 * Math.PI / 2, [0, Math.PI * 2], 1));
+  },
+  onUpdate: function (slider) {
+    var value = slider.getValue();
+    confettiCannon.config.angle = value;
+    slider.valueElement.textContent = ((Math.PI * 2 - value) / (Math.PI / 180)).toFixed(2);
+  },
+});
+
+new SliderControl({
+  sliderControlElement: document.getElementById('cc_blastArc'),
+
+  trackClassName: 'sliderControl__track',
+  knobClassName: 'sliderControl__knob',
+  valueClassName: 'sliderControl__value',
+
+  transformValue: function(value) {
+    return Util.modulate(value, 1, [0, Math.PI * 2]);
+  },
+  onInit: function (slider) {
+    slider.setValue(Util.modulate(Math.PI / 2, [0, Math.PI * 2], 1));
+  },
+  onUpdate: function (slider) {
+    var value = slider.getValue();
+    confettiCannon.config.blastArc = value;
+    slider.valueElement.textContent = (value / (Math.PI / 180)).toFixed(2);
+  },
+});
+
+new SliderControl({
+  sliderControlElement: document.getElementById('cc_maxPower'),
+
+  trackClassName: 'sliderControl__track',
+  knobClassName: 'sliderControl__knob',
+  valueClassName: 'sliderControl__value',
+
+  transformValue: function(value) {
+    return Util.modulate(value, 1, [10, 150]);
+  },
+  onInit: function (slider) {
+    slider.setValue(Util.modulate(50, [10, 150], 1));
+  },
+  onUpdate: function (slider) {
+    var value = slider.getValue();
+    confettiCannon.config.powerRange = [10, value];
+    slider.valueElement.textContent = (value).toFixed(2);
+  },
+});
+
+new SliderControl({
+  sliderControlElement: document.getElementById('cc_gravity'),
+
+  trackClassName: 'sliderControl__track',
+  knobClassName: 'sliderControl__knob',
+  valueClassName: 'sliderControl__value',
+
+  transformValue: function(value) {
+    return Util.modulate(value, 1, [-2, 2]);
+  },
+  onInit: function (slider) {
+    slider.setValue(Util.modulate(1, [-2, 2], 1));
+  },
+  onUpdate: function (slider) {
+    var value = slider.getValue();
+    confettiCannon.config.gravity = value;
+    slider.valueElement.textContent = (value).toFixed(2);
+  },
+});
