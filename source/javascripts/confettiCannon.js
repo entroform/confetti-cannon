@@ -19,7 +19,9 @@ var CONFETTI_CANNON_DEFAULT_CONFIG = {
   // Cannon Settings
   // Warning firePosition is relative to canvas.
   firePosition: new Vector2(),
-  updateFirePosition: function () { return false; },
+  updateFirePosition: function () {
+    return false;
+  },
 
   numberOfConfetti: 500,
   delay: 0,
@@ -113,35 +115,36 @@ ConfettiCannon.prototype = {
       this.canvasElement.style.zIndex = this.config.zIndex.toString();
 
       this.canvasElement.style.left = '0px';
-      this.canvasElement.style.top  = '0px';
+      this.canvasElement.style.top = '0px';
 
       this.setCanvasDimensionToWindow();
-
       this.config.prepareCanvas(this.canvasElement, this);
+
       this.context = this.canvasElement.getContext('2d');
 
       if (Util.isHTMLElement(this.config.parentElement) === true)
         this.config.parentElement.appendChild(this.canvasElement);
-        var result = this.config.updateFirePosition(this);
-        if (Vector2.isPoint(result) === true)
-          this.config.firePosition.equals(result);
+
+      var result = this.config.updateFirePosition(this);
+      if (Vector2.isPoint(result) === true)
+        this.config.firePosition.equals(result);
     }
   },
-  setCanvasDimension: function(width, height) {
-    this.canvasElement.width  = width  * this.config.resolutionMultiplier;
+  setCanvasDimension: function (width, height) {
+    this.canvasElement.width = width * this.config.resolutionMultiplier;
     this.canvasElement.height = height * this.config.resolutionMultiplier;
   },
   setCanvasDimensionToWindow: function () {
-    this.canvasElement.style.width  = window.innerWidth  + 'px';
+    this.canvasElement.style.width = window.innerWidth + 'px';
     this.canvasElement.style.height = window.innerHeight + 'px';
-    this.canvasElement.width  = window.innerWidth * this.config.resolutionMultiplier;
+    this.canvasElement.width = window.innerWidth * this.config.resolutionMultiplier;
     this.canvasElement.height = window.innerHeight * this.config.resolutionMultiplier;
   },
   getElementVectorRelativeToCanvas: function (element) {
-    var canvasRect  = this.canvasElement.getBoundingClientRect();
+    var canvasRect = this.canvasElement.getBoundingClientRect();
     var elementRect = element.getBoundingClientRect();
-    var x = (elementRect.left - canvasRect.left) + (elementRect.width  / 2);
-    var y = (elementRect.top  - canvasRect.top ) + (elementRect.height / 2);
+    var x = (elementRect.left - canvasRect.left) + (elementRect.width / 2);
+    var y = (elementRect.top - canvasRect.top) + (elementRect.height / 2);
     return new Vector2(x, y);
   },
   // 10) This is called once canvasElement is defined and is in the DOM. Start animation!
