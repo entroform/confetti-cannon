@@ -8,6 +8,7 @@ var CONFETTI_CANNON_DEFAULT_CONFIG = {
   parentElement: null,
   resolutionMultiplier: 1,
   zIndex: 0,
+  prepareCanvas: function (canvas, context) {},
 
   // Confetti settings
   colorChoices: ['#80EAFF', '#FF0055', '#00FFAA', '#FFFF00'],
@@ -16,7 +17,10 @@ var CONFETTI_CANNON_DEFAULT_CONFIG = {
   lifeSpanRange: [100, 200],
 
   // Cannon Settings
+  // Warning firePosition is relative to canvas.
   firePosition: new Vector2(),
+  updateFirePosition: function () { return false; },
+
   numberOfConfetti: 500,
   delay: 0,
   angle: 3 * Math.PI / 2,
@@ -98,7 +102,6 @@ ConfettiCannon.prototype = {
       simplexZoomMultiplier: Util.modulate(Math.random(), 1, this.config.simplexZoomMultiplierRange),
       simplexXOffset: Math.random() * this.config.simplexOffsetMultiplier,
       simplexYOffset: Math.random() * this.config.simplexOffsetMultiplier,
-
     };
   },
   // 9) Create canvas element and calculate offset. Takes in a callback (begin method).
@@ -106,25 +109,40 @@ ConfettiCannon.prototype = {
     if (typeof this.canvasElement === 'undefined') {
       this.canvasElement = document.createElement('CANVAS');
 
-      this.canvasElement.style.position = 'fixed';
+      this.canvasElement.style.position = 'absolute';
       this.canvasElement.style.zIndex = this.config.zIndex.toString();
 
       this.canvasElement.style.left = '0px';
-      this.canvasElement.style.top = '0px';
+      this.canvasElement.style.top  = '0px';
 
-      this.updateCanvasDimension();
+      this.setCanvasDimensionToWindow();
 
+      this.config.prepareCanvas(this.canvasElement, this);
       this.context = this.canvasElement.getContext('2d');
 
       if (Util.isHTMLElement(this.config.parentElement) === true)
         this.config.parentElement.appendChild(this.canvasElement);
+        var result = this.config.updateFirePosition(this);
+        if (Vector2.isPoint(result) === true)
+          this.config.firePosition.equals(result);
     }
   },
-  updateCanvasDimension: function () {
-    this.canvasElement.style.width = window.innerWidth + 'px';
+  setCanvasDimension: function(width, height) {
+    this.canvasElement.width  = width  * this.config.resolutionMultiplier;
+    this.canvasElement.height = height * this.config.resolutionMultiplier;
+  },
+  setCanvasDimensionToWindow: function () {
+    this.canvasElement.style.width  = window.innerWidth  + 'px';
     this.canvasElement.style.height = window.innerHeight + 'px';
-    this.canvasElement.width = window.innerWidth * this.config.resolutionMultiplier;
+    this.canvasElement.width  = window.innerWidth * this.config.resolutionMultiplier;
     this.canvasElement.height = window.innerHeight * this.config.resolutionMultiplier;
+  },
+  getElementVectorRelativeToCanvas: function (element) {
+    var canvasRect  = this.canvasElement.getBoundingClientRect();
+    var elementRect = element.getBoundingClientRect();
+    var x = (elementRect.left - canvasRect.left) + (elementRect.width  / 2);
+    var y = (elementRect.top  - canvasRect.top ) + (elementRect.height / 2);
+    return new Vector2(x, y);
   },
   // 10) This is called once canvasElement is defined and is in the DOM. Start animation!
   begin: function () {

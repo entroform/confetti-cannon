@@ -16,10 +16,9 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
+    "autoprefixer": "^9.6.1",
     "cssnano": "^4.1.10",
     "sass": "^1.22.7"
   },
-  "dependencies": {
-    "autoprefixer": "^9.6.1"
-  }
+  "dependencies": {}
 }
