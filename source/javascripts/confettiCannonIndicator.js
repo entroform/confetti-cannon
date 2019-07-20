@@ -13,26 +13,62 @@ var ConfettiCannonIndicator = function(config) {
 }
 
 ConfettiCannonIndicator.prototype = {
-  init: function(config) {
+  init: function (config) {
     this.config = Util.objectAssign({}, CONFETTI_CANNON_INDICATOR_DEFAULT_CONFIG);
     this.setConfig(config);
 
     this.context = this.config.canvasElement.getContext('2d');
   },
-  setConfig: function(config) {
+  setConfig: function (config) {
     if (typeof config === 'object') Util.objectAssign(this.config, config);
   },
+  updateCanvas: function () {
+    this.config.canvasElement.width = window.innerWidth;
+    this.config.canvasElement.height = window.innerHeight;
+  },
   display: function() {
+    this.updateCanvas();
     var position = this.config.getCannonPosition();
-    var length = Util.hypotenuse(this.config.canvasElement.offsetWidth, this.config.canvasElement.offsetHeight);
-    var target = Vector2.clone(position).rotateTo(this.config.angle).normalize().multiply(length);
 
-    context.save();
-    context.moveTo(position.x, position.y);
-    context.lineTo(target.x, target, y);
-    context.strokeStyle = 'red';
-    context.stroke();
-    context.restore();
+    var length = Util.hypotenuse(
+      this.config.canvasElement.offsetWidth,
+      this.config.canvasElement.offsetHeight
+    );
+    length = length / 2;
+
+    var target = new Vector2(0, 1).rotateTo(this.config.angle).normalize().multiply(length).add(position);
+    var left   = new Vector2(0, 1).rotateTo(this.config.angle - (this.config.arc / 2)).normalize().multiply(length).add(position);
+    var right  = new Vector2(0, 1).rotateTo(this.config.angle + (this.config.arc / 2)).normalize().multiply(length).add(position);
+
+    var gradient = this.context.createLinearGradient(position.x, position.y, target.x, target.y);
+    gradient.addColorStop(0, "hsla(340, 100%, 50%, 0)");
+    gradient.addColorStop(1, "hsla(340, 100%, 50%, 1)");
+    this.context.save();
+    this.context.beginPath();
+    this.context.moveTo(position.x, position.y);
+    this.context.lineTo(target.x, target.y);
+    this.context.strokeStyle = gradient;
+    this.context.stroke();
+
+    var gradient0 = this.context.createLinearGradient(position.x, position.y, right.x, right.y);
+    gradient0.addColorStop(0, "hsla(20, 100%, 50%, 0)");
+    gradient0.addColorStop(1, "hsla(20, 100%, 50%, 0.8)");
+    this.context.beginPath();
+    this.context.moveTo(position.x, position.y);
+    this.context.lineTo(right.x, right.y);
+    this.context.strokeStyle = gradient0;
+    this.context.stroke();
+    this.context.restore();
+
+    var gradient1 = this.context.createLinearGradient(position.x, position.y, left.x, left.y);
+    gradient1.addColorStop(0, "hsla(20, 100%, 50%, 0)");
+    gradient1.addColorStop(1, "hsla(20, 100%, 50%, 0.8)");
+    this.context.beginPath();
+    this.context.moveTo(position.x, position.y);
+    this.context.lineTo(left.x, left.y);
+    this.context.strokeStyle = gradient1;
+    this.context.stroke();
+    this.context.restore();
   },
 };
 

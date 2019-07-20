@@ -70,6 +70,20 @@ window.addEventListener('resize', function () {
 
 // @indicator
 
+import ConfettiCannonIndicator from './confettiCannonIndicator';
+
+var confettiCannonIndicator = new ConfettiCannonIndicator({
+  canvasElement: document.querySelector('canvas.confettiCannonIndicator'),
+  getCannonPosition: function () {
+    const rect = triggerElement.getBoundingClientRect();
+    return new Vector2(
+      rect.left + rect.width  / 2,
+      rect.top  + rect.height / 2
+    );
+  },
+});
+
+confettiCannonIndicator.display();
 
 // @controls
 import SliderControl from './controls/slider';
@@ -90,7 +104,10 @@ new SliderControl({
   onUpdate: function (slider) {
     var value = slider.getValue();
     confettiCannon.config.angle = value;
+    confettiCannonIndicator.config.angle = value;
+    confettiCannonIndicator.display();
     slider.valueElement.textContent = ((Math.PI * 2 - value) / (Math.PI / 180)).toFixed(2);
+
   },
 });
 
@@ -110,6 +127,8 @@ new SliderControl({
   onUpdate: function (slider) {
     var value = slider.getValue();
     confettiCannon.config.blastArc = value;
+    confettiCannonIndicator.config.arc = value;
+    confettiCannonIndicator.display();
     slider.valueElement.textContent = (value / (Math.PI / 180)).toFixed(2);
   },
 });

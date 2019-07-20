@@ -109,6 +109,10 @@ Vector2.prototype = {
   },
 };
 
+Vector2.clone = function (v) {
+  return new Vector2().equals(v);
+}
+
 Vector2.isPoint = function (p) {
   return (typeof p === 'object' && typeof p.x === 'number' && typeof p.y === 'number');
 }
