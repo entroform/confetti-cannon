@@ -88,107 +88,97 @@ confettiCannonIndicator.display();
 // @controls
 import SliderControl from './controls/slider';
 
+var sliderControlElementAngle = document.getElementById('cc_angle');
 new SliderControl({
-  sliderControlElement: document.getElementById('cc_angle'),
+  trackElement: sliderControlElementAngle.querySelector('.sliderControl__track'),
+  knobElement: sliderControlElementAngle.querySelector('.sliderControl__knob'),
+  valueElement: sliderControlElementAngle.querySelector('.sliderControl__value'),
 
-  trackClassName: 'sliderControl__track',
-  knobClassName: 'sliderControl__knob',
-  valueClassName: 'sliderControl__value',
+  range: [0, Math.PI * 2],
 
-  transformValue: function(value) {
-    return Util.modulate(value, 1, [0, Math.PI * 2]);
-  },
   onInit: function (slider) {
-    slider.setValue(Util.modulate(3 * Math.PI / 2, [0, Math.PI * 2], 1));
+    slider.setValue(3 * Math.PI / 2);
   },
   onUpdate: function (slider) {
     var value = slider.getValue();
     confettiCannon.config.angle = value;
     confettiCannonIndicator.config.angle = value;
     confettiCannonIndicator.display();
-    slider.valueElement.textContent = ((Math.PI * 2 - value) / (Math.PI / 180)).toFixed(2);
-
+    slider.config.valueElement.textContent = ((Math.PI * 2 - value) / (Math.PI / 180)).toFixed(2);
   },
 });
 
+var sliderBlastArcControlElement = document.getElementById('cc_blastArc');
 new SliderControl({
-  sliderControlElement: document.getElementById('cc_blastArc'),
+  trackElement: sliderBlastArcControlElement.querySelector('.sliderControl__track'),
+  knobElement: sliderBlastArcControlElement.querySelector('.sliderControl__knob'),
+  valueElement: sliderBlastArcControlElement.querySelector('.sliderControl__value'),
 
-  trackClassName: 'sliderControl__track',
-  knobClassName: 'sliderControl__knob',
-  valueClassName: 'sliderControl__value',
+  range: [0, Math.PI * 2],
 
-  transformValue: function(value) {
-    return Util.modulate(value, 1, [0, Math.PI * 2]);
-  },
   onInit: function (slider) {
-    slider.setValue(Util.modulate(Math.PI / 2, [0, Math.PI * 2], 1));
+    slider.setValue(Math.PI / 2);
   },
   onUpdate: function (slider) {
     var value = slider.getValue();
     confettiCannon.config.blastArc = value;
     confettiCannonIndicator.config.arc = value;
     confettiCannonIndicator.display();
-    slider.valueElement.textContent = (value / (Math.PI / 180)).toFixed(2);
+    slider.config.valueElement.textContent = (value / (Math.PI / 180)).toFixed(2);
   },
 });
 
+var sliderMaxPowerControlElement = document.getElementById('cc_maxPower');
 new SliderControl({
-  sliderControlElement: document.getElementById('cc_maxPower'),
+  trackElement: sliderMaxPowerControlElement.querySelector('.sliderControl__track'),
+  knobElement: sliderMaxPowerControlElement.querySelector('.sliderControl__knob'),
+  valueElement: sliderMaxPowerControlElement.querySelector('.sliderControl__value'),
 
-  trackClassName: 'sliderControl__track',
-  knobClassName: 'sliderControl__knob',
-  valueClassName: 'sliderControl__value',
+  range: [10, 150],
 
-  transformValue: function(value) {
-    return Util.modulate(value, 1, [10, 150]);
-  },
   onInit: function (slider) {
-    slider.setValue(Util.modulate(50, [10, 150], 1));
+    slider.setValue(50);
   },
   onUpdate: function (slider) {
     var value = slider.getValue();
     confettiCannon.config.powerRange = [10, value];
-    slider.valueElement.textContent = (value).toFixed(2);
+    slider.config.valueElement.textContent = (value).toFixed(2);
   },
 });
 
-new SliderControl({
-  sliderControlElement: document.getElementById('cc_numberOfConfetti'),
+var sliderNumberOfConfettiControlElement = document.getElementById('cc_numberOfConfetti');
+new SliderControl({ 
+  trackElement: sliderNumberOfConfettiControlElement.querySelector('.sliderControl__track'),
+  knobElement: sliderNumberOfConfettiControlElement.querySelector('.sliderControl__knob'),
+  valueElement: sliderNumberOfConfettiControlElement.querySelector('.sliderControl__value'),
 
-  trackClassName: 'sliderControl__track',
-  knobClassName: 'sliderControl__knob',
-  valueClassName: 'sliderControl__value',
+  range: [50, 10000],
 
-  transformValue: function(value) {
-    return Util.modulate(value, 1, [50, 10000]);
-  },
   onInit: function (slider) {
-    slider.setValue(Util.modulate(500, [50, 10000], 1));
+    slider.setValue(500);
   },
   onUpdate: function (slider) {
     var value = slider.getValue();
     confettiCannon.config.numberOfConfetti = Math.floor(value);
-    slider.valueElement.textContent = Math.floor(value);
+    slider.config.valueElement.textContent = Math.floor(value);
   },
 });
 
+
+var sliderGravityControlElement = document.getElementById('cc_gravity');
 new SliderControl({
-  sliderControlElement: document.getElementById('cc_gravity'),
+  trackElement: sliderGravityControlElement.querySelector('.sliderControl__track'),
+  knobElement: sliderGravityControlElement.querySelector('.sliderControl__knob'),
+  valueElement: sliderGravityControlElement.querySelector('.sliderControl__value'),
 
-  trackClassName: 'sliderControl__track',
-  knobClassName: 'sliderControl__knob',
-  valueClassName: 'sliderControl__value',
+  range: [-2, 2],
 
-  transformValue: function(value) {
-    return Util.modulate(value, 1, [-2, 2]);
-  },
   onInit: function (slider) {
-    slider.setValue(Util.modulate(1, [-2, 2], 1));
+    slider.setValue(1);
   },
   onUpdate: function (slider) {
     var value = slider.getValue();
     confettiCannon.config.gravity = value;
-    slider.valueElement.textContent = (value).toFixed(2);
+    slider.config.valueElement.textContent = value.toFixed(2);
   },
 });
