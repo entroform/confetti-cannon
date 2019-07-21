@@ -115,7 +115,7 @@ SliderControl.prototype = {
         this.config.listenToKnobOnly === false ||
         (
           this.config.listenToKnobOnly === true &&
-          pointerEvent.target === knobElement
+          Util.hasAncestor(pointerEvent.target, knobElement) === true
         )
       ) {
         this.isActive = true;

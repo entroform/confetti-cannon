@@ -88,6 +88,18 @@ var Util = {
       return parseInt(number.toFixed(0), 10);
     }
   },
+  hasAncestor(element, ancestor) {
+    if (element === null) return false;
+    let currentEl = element;
+    while (currentEl !== null && currentEl.nodeName !== 'HTML') {
+      currentEl = currentEl;
+      if (currentEl !== null) {
+        if (currentEl === ancestor) return true;
+        currentEl = currentEl.parentElement;
+      }
+    }
+    return false;
+  },
 };
 
 export default Util;

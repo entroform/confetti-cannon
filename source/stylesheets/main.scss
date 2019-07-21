@@ -136,6 +136,14 @@ canvas.confettiCannonIndicator {
   top: 20px;
   z-index: 1000;
 
+  transition-duration: 100ms;
+  transition-property: transform;
+  transition-timing-function: ease-out;
+
+  &:active {
+    transform: scale(0.9);
+  }
+
   img {
     width: 32px;
     height: 32px;

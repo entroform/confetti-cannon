@@ -209,7 +209,8 @@ jsControlsOpenElement.addEventListener('click', function () {
 }.bind(this));
 
 var jsControlsCloseElement = document.querySelector('.js-controls-close');
-jsControlsCloseElement.addEventListener('click', function () {
+
+var closeControlsElement = function () {
   if (controlsIsOpen === true) {
     controlsElement.classList.remove('controls--animate-in');
     controlsElement.classList.add('controls--animate-out');
@@ -219,4 +220,17 @@ jsControlsCloseElement.addEventListener('click', function () {
       controlsIsOpen = false;
     }.bind(this), 200);
   }
+}
+
+jsControlsCloseElement.addEventListener('click', function () {
+  closeControlsElement();
 }.bind(this));
+
+window.addEventListener('keyup', function (event) {
+  if (
+    controlsIsOpen === true
+    && event.keyCode === 27
+  ) {
+    closeControlsElement();
+  }
+});
