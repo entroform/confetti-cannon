@@ -89,7 +89,7 @@ confettiCannonIndicator.display();
 import SliderControl from './controls/slider';
 
 var sliderControlElementAngle = document.getElementById('cc_angle');
-new SliderControl({
+var sc_angle = new SliderControl({
   trackElement: sliderControlElementAngle.querySelector('.sliderControl__track'),
   knobElement: sliderControlElementAngle.querySelector('.sliderControl__knob'),
   valueElement: sliderControlElementAngle.querySelector('.sliderControl__value'),
@@ -109,7 +109,7 @@ new SliderControl({
 });
 
 var sliderBlastArcControlElement = document.getElementById('cc_blastArc');
-new SliderControl({
+var sc_blastArc = new SliderControl({
   trackElement: sliderBlastArcControlElement.querySelector('.sliderControl__track'),
   knobElement: sliderBlastArcControlElement.querySelector('.sliderControl__knob'),
   valueElement: sliderBlastArcControlElement.querySelector('.sliderControl__value'),
@@ -129,7 +129,7 @@ new SliderControl({
 });
 
 var sliderMaxPowerControlElement = document.getElementById('cc_maxPower');
-new SliderControl({
+var sc_maxPower = new SliderControl({
   trackElement: sliderMaxPowerControlElement.querySelector('.sliderControl__track'),
   knobElement: sliderMaxPowerControlElement.querySelector('.sliderControl__knob'),
   valueElement: sliderMaxPowerControlElement.querySelector('.sliderControl__value'),
@@ -149,7 +149,7 @@ new SliderControl({
 });
 
 var sliderNumberOfConfettiControlElement = document.getElementById('cc_numberOfConfetti');
-new SliderControl({ 
+var sc_numberOfConfetti = new SliderControl({ 
   trackElement: sliderNumberOfConfettiControlElement.querySelector('.sliderControl__track'),
   knobElement: sliderNumberOfConfettiControlElement.querySelector('.sliderControl__knob'),
   valueElement: sliderNumberOfConfettiControlElement.querySelector('.sliderControl__value'),
@@ -168,7 +168,7 @@ new SliderControl({
 
 
 var sliderGravityControlElement = document.getElementById('cc_gravity');
-new SliderControl({
+var sc_gravity = new SliderControl({
   trackElement: sliderGravityControlElement.querySelector('.sliderControl__track'),
   knobElement: sliderGravityControlElement.querySelector('.sliderControl__knob'),
   valueElement: sliderGravityControlElement.querySelector('.sliderControl__value'),
@@ -184,3 +184,39 @@ new SliderControl({
     slider.config.valueElement.textContent = value.toFixed(2);
   },
 });
+
+var updateSliders = function () {
+  sc_angle.update();
+  sc_blastArc.update();
+  sc_gravity.update();
+  sc_maxPower.update();
+  sc_numberOfConfetti.update();
+}
+// Controls
+var controlsIsOpen = false;
+var controlsElement = document.querySelector('.controls');
+var jsControlsOpenElement = document.querySelector('.js-controls-open');
+jsControlsOpenElement.addEventListener('click', function () {
+  if (controlsIsOpen === false) {
+    controlsIsOpen = true;
+    controlsElement.classList.remove('controls--animate-out');
+    jsControlsOpenElement.style.display = 'none';
+    controlsElement.classList.add('controls--active');
+    updateSliders();
+    controlsElement.classList.add('controls--animate-in');
+  }
+  
+}.bind(this));
+
+var jsControlsCloseElement = document.querySelector('.js-controls-close');
+jsControlsCloseElement.addEventListener('click', function () {
+  if (controlsIsOpen === true) {
+    controlsElement.classList.remove('controls--animate-in');
+    controlsElement.classList.add('controls--animate-out');
+    setTimeout(function () {
+      controlsElement.classList.remove('controls--active');
+      jsControlsOpenElement.style.display = 'block';
+      controlsIsOpen = false;
+    }.bind(this), 200);
+  }
+}.bind(this));

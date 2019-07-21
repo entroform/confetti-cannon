@@ -87,7 +87,7 @@ var Util = {
       var number = this.modulate(Math.random(), 1, range, false);
       return parseInt(number.toFixed(0), 10);
     }
-  }
+  },
 };
 
 export default Util;

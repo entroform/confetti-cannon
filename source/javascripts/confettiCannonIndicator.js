@@ -1,6 +1,5 @@
 import Util from './util';
 import Vector2 from './vector2';
-import ConfettiCannon from './confettiCannon';
 
 var CONFETTI_CANNON_INDICATOR_DEFAULT_CONFIG = {
   canvasElement: undefined,
@@ -20,6 +19,8 @@ ConfettiCannonIndicator.prototype = {
     this.setConfig(config);
 
     this.context = this.config.canvasElement.getContext('2d');
+
+    this.listen();
   },
   setConfig: function (config) {
     if (typeof config === 'object') Util.objectAssign(this.config, config);
@@ -54,8 +55,8 @@ ConfettiCannonIndicator.prototype = {
       this.context.stroke();
 
       var gradient0 = this.context.createLinearGradient(position.x, position.y, right.x, right.y);
-      gradient0.addColorStop(0, 'hsla(20, 100%, 50%, 0)');
-      gradient0.addColorStop(1, 'hsla(20, 100%, 50%, 0.8)');
+      gradient0.addColorStop(0, 'hsla(340, 100%, 50%, 0)');
+      gradient0.addColorStop(1, 'hsla(340, 100%, 50%, 1)');
       this.context.beginPath();
       this.context.moveTo(position.x, position.y);
       this.context.lineTo(right.x, right.y);
@@ -64,8 +65,8 @@ ConfettiCannonIndicator.prototype = {
       // this.context.restore();
 
       var gradient1 = this.context.createLinearGradient(position.x, position.y, left.x, left.y);
-      gradient1.addColorStop(0, 'hsla(20, 100%, 50%, 0)');
-      gradient1.addColorStop(1, 'hsla(20, 100%, 50%, 0.8)');
+      gradient1.addColorStop(0, 'hsla(340, 100%, 50%, 0)');
+      gradient1.addColorStop(1, 'hsla(340, 100%, 50%, 1)');
       this.context.beginPath();
       this.context.moveTo(position.x, position.y);
       this.context.lineTo(left.x, left.y);
@@ -94,6 +95,12 @@ ConfettiCannonIndicator.prototype = {
     }
     this.context.strokeStyle = 'hsla(340, 100%, 50%, 0.5)';
     this.context.stroke();
+  },
+  listen: function () {
+    window.addEventListener('resize', function () {
+      this.updateCanvas();
+      this.display();
+    }.bind(this));
   },
 };
 

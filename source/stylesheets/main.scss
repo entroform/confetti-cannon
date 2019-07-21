@@ -54,21 +54,7 @@ html {
   }
 }
 
-.controls {
-  background-color: hsla(240, 10%, 10%, 0.4);
-  box-sizing: border-box;
-  min-height: 100vh;
-  min-width: 300px;
-  padding: 20px;
-  position: fixed;
-  right: 0;
-  top: 0;
-  z-index: 100;
-}
-
-.control__group {
-  margin-bottom: 20px;
-}
+@import 'controls';
 
 // SliderControl
 
@@ -92,8 +78,9 @@ html {
 .sliderControl__track {
   background-color: hsl(240, 10%, 5%);
   border-radius: 4px;
+  cursor: pointer;
   position: relative;
-  height: 20px;
+  height: 30px;
   width: 100%;
 
   transition-duration: 200ms;
@@ -108,8 +95,9 @@ html {
   position: absolute;
   left: 0px;
   top: 0px;
-  height: 20px;
-  width: 10px;
+  height: 30px;
+  width: 12px;
+  z-index: 100;
 
   transition-duration: 0.2s;
   transition-timing-function: ease-out;
@@ -139,4 +127,17 @@ canvas.confettiCannonIndicator {
   top: 0;
   width: 100vw;
   z-index: 0;
+}
+
+.js-controls-open {
+  cursor: pointer;
+  position: fixed;
+  right: 20px;
+  top: 20px;
+  z-index: 1000;
+
+  img {
+    width: 32px;
+    height: 32px;
+  }
 }
