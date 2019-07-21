@@ -1,10 +1,12 @@
 import Util from './util';
 import Vector2 from './vector2';
+import ConfettiCannon from './confettiCannon';
 
 var CONFETTI_CANNON_INDICATOR_DEFAULT_CONFIG = {
   canvasElement: undefined,
   angle: 0,
   arc: Math.PI / 4,
+  power: 10,
   getCannonPosition: function() { return new Vector2(); },
 };
 
@@ -40,35 +42,58 @@ ConfettiCannonIndicator.prototype = {
     var left   = new Vector2(0, 1).rotateTo(this.config.angle - (this.config.arc / 2)).normalize().multiply(length).add(position);
     var right  = new Vector2(0, 1).rotateTo(this.config.angle + (this.config.arc / 2)).normalize().multiply(length).add(position);
 
-    var gradient = this.context.createLinearGradient(position.x, position.y, target.x, target.y);
-    gradient.addColorStop(0, "hsla(340, 100%, 50%, 0)");
-    gradient.addColorStop(1, "hsla(340, 100%, 50%, 1)");
-    this.context.save();
-    this.context.beginPath();
-    this.context.moveTo(position.x, position.y);
-    this.context.lineTo(target.x, target.y);
-    this.context.strokeStyle = gradient;
-    this.context.stroke();
+    if (this.config.arc !== Math.PI * 2) {
+      var gradient = this.context.createLinearGradient(position.x, position.y, target.x, target.y);
+      gradient.addColorStop(0, 'hsla(340, 100%, 50%, 0)');
+      gradient.addColorStop(1, 'hsla(340, 100%, 50%, 1)');
+      this.context.save();
+      this.context.beginPath();
+      this.context.moveTo(position.x, position.y);
+      this.context.lineTo(target.x, target.y);
+      this.context.strokeStyle = gradient;
+      this.context.stroke();
 
-    var gradient0 = this.context.createLinearGradient(position.x, position.y, right.x, right.y);
-    gradient0.addColorStop(0, "hsla(20, 100%, 50%, 0)");
-    gradient0.addColorStop(1, "hsla(20, 100%, 50%, 0.8)");
-    this.context.beginPath();
-    this.context.moveTo(position.x, position.y);
-    this.context.lineTo(right.x, right.y);
-    this.context.strokeStyle = gradient0;
-    this.context.stroke();
-    this.context.restore();
+      var gradient0 = this.context.createLinearGradient(position.x, position.y, right.x, right.y);
+      gradient0.addColorStop(0, 'hsla(20, 100%, 50%, 0)');
+      gradient0.addColorStop(1, 'hsla(20, 100%, 50%, 0.8)');
+      this.context.beginPath();
+      this.context.moveTo(position.x, position.y);
+      this.context.lineTo(right.x, right.y);
+      this.context.strokeStyle = gradient0;
+      this.context.stroke();
+      // this.context.restore();
 
-    var gradient1 = this.context.createLinearGradient(position.x, position.y, left.x, left.y);
-    gradient1.addColorStop(0, "hsla(20, 100%, 50%, 0)");
-    gradient1.addColorStop(1, "hsla(20, 100%, 50%, 0.8)");
+      var gradient1 = this.context.createLinearGradient(position.x, position.y, left.x, left.y);
+      gradient1.addColorStop(0, 'hsla(20, 100%, 50%, 0)');
+      gradient1.addColorStop(1, 'hsla(20, 100%, 50%, 0.8)');
+      this.context.beginPath();
+      this.context.moveTo(position.x, position.y);
+      this.context.lineTo(left.x, left.y);
+      this.context.strokeStyle = gradient1;
+      this.context.stroke();
+      // this.context.restore();
+    }
+
     this.context.beginPath();
-    this.context.moveTo(position.x, position.y);
-    this.context.lineTo(left.x, left.y);
-    this.context.strokeStyle = gradient1;
+    if (this.config.arc === Math.PI * 2) {
+      this.context.arc(
+        position.x,
+        position.y,
+        Util.modulate(this.config.power, [10, 150], [100, 500]),
+        0,
+        Math.PI * 2
+      );     
+    } else {
+      this.context.arc(
+        position.x,
+        position.y,
+        Util.modulate(this.config.power, [10, 150], [100, 500]),
+        Util.cycleNumber(this.config.angle - this.config.arc / 2, Math.PI * 2),
+        Util.cycleNumber(this.config.angle + this.config.arc / 2, Math.PI * 2)
+      );
+    }
+    this.context.strokeStyle = 'hsla(340, 100%, 50%, 0.5)';
     this.context.stroke();
-    this.context.restore();
   },
 };
 

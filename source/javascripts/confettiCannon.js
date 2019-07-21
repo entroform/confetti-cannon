@@ -194,7 +194,8 @@ ConfettiCannon.prototype = {
   },
   // 13) Helper function to clear canvas every frame.
   clearCanvas: function () {
-    this.context.clearRect(0, 0, this.canvasElement.width, this.canvasElement.height);
+    if (typeof this.canvasElement === 'object')
+      this.context.clearRect(0, 0, this.canvasElement.width, this.canvasElement.height);
   },
   // 15) This is called after the last coin reached the end. Or if numberOfCoins is 0. Sayonara!
   end: function () {

@@ -104,7 +104,7 @@ new SliderControl({
     confettiCannon.config.angle = value;
     confettiCannonIndicator.config.angle = value;
     confettiCannonIndicator.display();
-    slider.config.valueElement.textContent = ((Math.PI * 2 - value) / (Math.PI / 180)).toFixed(2);
+    slider.config.valueElement.textContent = ((Math.PI * 2 - value) / (Math.PI / 180)).toFixed(2) + String.fromCharCode(176);
   },
 });
 
@@ -124,7 +124,7 @@ new SliderControl({
     confettiCannon.config.blastArc = value;
     confettiCannonIndicator.config.arc = value;
     confettiCannonIndicator.display();
-    slider.config.valueElement.textContent = (value / (Math.PI / 180)).toFixed(2);
+    slider.config.valueElement.textContent = (value / (Math.PI / 180)).toFixed(2) + String.fromCharCode(176);
   },
 });
 
@@ -142,6 +142,8 @@ new SliderControl({
   onUpdate: function (slider) {
     var value = slider.getValue();
     confettiCannon.config.powerRange = [10, value];
+    confettiCannonIndicator.config.power = value;
+    confettiCannonIndicator.display();
     slider.config.valueElement.textContent = (value).toFixed(2);
   },
 });
