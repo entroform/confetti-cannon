@@ -129,6 +129,15 @@ canvas.confettiCannonIndicator {
   z-index: 0;
 }
 
+@keyframes animation-icon-rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(359deg);
+  }
+}
+
 .js-controls-open {
   cursor: pointer;
   position: fixed;
@@ -142,6 +151,15 @@ canvas.confettiCannonIndicator {
 
   &:active {
     transform: scale(0.9);
+  }
+
+  &.js-controls-open--animate {
+    img {
+      animation-duration: 10s;
+      animation-name: animation-icon-rotate;
+      animation-iteration-count: infinite;
+      animation-timing-function: linear;
+    }
   }
 
   img {
