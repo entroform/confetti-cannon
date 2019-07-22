@@ -73,8 +73,8 @@ ConfettiCannon.prototype = {
   setup: function (callback) {
     if (this.isActive === false) {
       this.isActive = true;
-      this.populate();
       this.createCanvas(callback);
+      this.populate();
     }
   },
   // 7) Prepare, calculate, and initialize confetti objects.
@@ -131,13 +131,15 @@ ConfettiCannon.prototype = {
     }
   },
   setCanvasDimension: function (width, height) {
-    this.canvasElement.width = width * this.config.resolutionMultiplier;
+    this.canvasElement.style.width  = width  + 'px';
+    this.canvasElement.style.height = height + 'px';
+    this.canvasElement.width  = width  * this.config.resolutionMultiplier;
     this.canvasElement.height = height * this.config.resolutionMultiplier;
   },
   setCanvasDimensionToWindow: function () {
-    this.canvasElement.style.width = window.innerWidth + 'px';
+    this.canvasElement.style.width  = window.innerWidth + 'px';
     this.canvasElement.style.height = window.innerHeight + 'px';
-    this.canvasElement.width = window.innerWidth * this.config.resolutionMultiplier;
+    this.canvasElement.width  = window.innerWidth * this.config.resolutionMultiplier;
     this.canvasElement.height = window.innerHeight * this.config.resolutionMultiplier;
   },
   getElementCenterVectorRelativeToCanvas: function (element) {
