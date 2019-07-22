@@ -122,8 +122,13 @@ ConfettiCannon.prototype = {
 
       this.context = this.canvasElement.getContext('2d');
 
-      if (Util.isHTMLElement(this.config.parentElement) === true)
-        this.config.parentElement.appendChild(this.canvasElement);
+      if (Util.isHTMLElement(this.config.parentElement) === true) {
+        if (this.config.parentElement.childElementCount > 0) {
+          this.config.parentElement.insertBefore(this.canvasElement, this.config.parentElement.childNodes[0]);
+        } else {
+          this.config.parentElement.appendChild(this.canvasElement);
+        }
+      }
 
       var result = this.config.updateFirePosition(this);
       if (Vector2.isPoint(result) === true)
