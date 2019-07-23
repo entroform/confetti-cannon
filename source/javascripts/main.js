@@ -1,4 +1,3 @@
-import Util from './util';
 import Vector2 from './vector2';
 import ConfettiCannon from './confettiCannon';
 
@@ -77,8 +76,8 @@ var confettiCannonIndicator = new ConfettiCannonIndicator({
   getCannonPosition: function () {
     const rect = triggerElement.getBoundingClientRect();
     return new Vector2(
-      rect.left + rect.width  / 2,
-      rect.top  + rect.height / 2
+      rect.left + rect.width / 2,
+      rect.top + rect.height / 2
     );
   },
 });
@@ -86,9 +85,10 @@ var confettiCannonIndicator = new ConfettiCannonIndicator({
 confettiCannonIndicator.display();
 
 // @controls
+
 import SliderControl from './controls/slider';
 
-var sliderControlElementAngle = document.getElementById('cc_angle');
+var sliderControlElementAngle = document.getElementById('sc_angle');
 var sc_angle = new SliderControl({
   trackElement: sliderControlElementAngle.querySelector('.sliderControl__track'),
   knobElement: sliderControlElementAngle.querySelector('.sliderControl__knob'),
@@ -108,7 +108,7 @@ var sc_angle = new SliderControl({
   },
 });
 
-var sliderBlastArcControlElement = document.getElementById('cc_blastArc');
+var sliderBlastArcControlElement = document.getElementById('sc_blastArc');
 var sc_blastArc = new SliderControl({
   trackElement: sliderBlastArcControlElement.querySelector('.sliderControl__track'),
   knobElement: sliderBlastArcControlElement.querySelector('.sliderControl__knob'),
@@ -128,7 +128,7 @@ var sc_blastArc = new SliderControl({
   },
 });
 
-var sliderMaxPowerControlElement = document.getElementById('cc_maxPower');
+var sliderMaxPowerControlElement = document.getElementById('sc_maxPower');
 var sc_maxPower = new SliderControl({
   trackElement: sliderMaxPowerControlElement.querySelector('.sliderControl__track'),
   knobElement: sliderMaxPowerControlElement.querySelector('.sliderControl__knob'),
@@ -148,8 +148,8 @@ var sc_maxPower = new SliderControl({
   },
 });
 
-var sliderNumberOfConfettiControlElement = document.getElementById('cc_numberOfConfetti');
-var sc_numberOfConfetti = new SliderControl({ 
+var sliderNumberOfConfettiControlElement = document.getElementById('sc_numberOfConfetti');
+var sc_numberOfConfetti = new SliderControl({
   trackElement: sliderNumberOfConfettiControlElement.querySelector('.sliderControl__track'),
   knobElement: sliderNumberOfConfettiControlElement.querySelector('.sliderControl__knob'),
   valueElement: sliderNumberOfConfettiControlElement.querySelector('.sliderControl__value'),
@@ -167,7 +167,7 @@ var sc_numberOfConfetti = new SliderControl({
 });
 
 
-var sliderGravityControlElement = document.getElementById('cc_gravity');
+var sliderGravityControlElement = document.getElementById('sc_gravity');
 var sc_gravity = new SliderControl({
   trackElement: sliderGravityControlElement.querySelector('.sliderControl__track'),
   knobElement: sliderGravityControlElement.querySelector('.sliderControl__knob'),
@@ -192,7 +192,9 @@ var updateSliders = function () {
   sc_maxPower.update();
   sc_numberOfConfetti.update();
 }
+
 // Controls
+
 var controlsIsOpen = false;
 var controlsElement = document.querySelector('.controls');
 var jsControlsOpenElement = document.querySelector('.js-controls-open');
@@ -205,7 +207,7 @@ jsControlsOpenElement.addEventListener('click', function () {
     updateSliders();
     controlsElement.classList.add('controls--animate-in');
   }
-  
+
 }.bind(this));
 
 var jsControlsCloseElement = document.querySelector('.js-controls-close');
@@ -228,9 +230,7 @@ jsControlsCloseElement.addEventListener('click', function () {
 
 window.addEventListener('keyup', function (event) {
   if (
-    controlsIsOpen === true
-    && event.keyCode === 27
-  ) {
-    closeControlsElement();
-  }
+    controlsIsOpen === true &&
+    event.keyCode === 27
+  ) closeControlsElement();
 });

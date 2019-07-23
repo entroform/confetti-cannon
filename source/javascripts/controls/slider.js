@@ -148,7 +148,9 @@ SliderControl.prototype = {
   listen: function () {
     if (Util.isHTMLElement(this.config.trackElement) === true) {
       this.pointerDragEventManager = new PointerDragEventManager({
-        onEvent: function (event) { event.preventDefault() },
+        onEvent: function (event) {
+          event.preventDefault();
+        },
         keepHistory: false,
         target: this.config.trackElement,
         onStart: this.eventHandlerStart.bind(this),

@@ -6,10 +6,12 @@ var CONFETTI_CANNON_INDICATOR_DEFAULT_CONFIG = {
   angle: 0,
   arc: Math.PI / 4,
   power: 10,
-  getCannonPosition: function() { return new Vector2(); },
+  getCannonPosition: function () {
+    return new Vector2();
+  },
 };
 
-var ConfettiCannonIndicator = function(config) {
+var ConfettiCannonIndicator = function (config) {
   this.init(config);
 }
 
@@ -29,7 +31,7 @@ ConfettiCannonIndicator.prototype = {
     this.config.canvasElement.width = window.innerWidth;
     this.config.canvasElement.height = window.innerHeight;
   },
-  display: function() {
+  display: function () {
     this.updateCanvas();
     var position = this.config.getCannonPosition();
 
@@ -40,8 +42,8 @@ ConfettiCannonIndicator.prototype = {
     length = length / 2;
 
     var target = new Vector2(0, 1).rotateTo(this.config.angle).normalize().multiply(length).add(position);
-    var left   = new Vector2(0, 1).rotateTo(this.config.angle - (this.config.arc / 2)).normalize().multiply(length).add(position);
-    var right  = new Vector2(0, 1).rotateTo(this.config.angle + (this.config.arc / 2)).normalize().multiply(length).add(position);
+    var left = new Vector2(0, 1).rotateTo(this.config.angle - (this.config.arc / 2)).normalize().multiply(length).add(position);
+    var right = new Vector2(0, 1).rotateTo(this.config.angle + (this.config.arc / 2)).normalize().multiply(length).add(position);
 
     if (this.config.arc !== Math.PI * 2) {
       var gradient = this.context.createLinearGradient(position.x, position.y, target.x, target.y);
@@ -83,7 +85,7 @@ ConfettiCannonIndicator.prototype = {
         Util.modulate(this.config.power, [10, 150], [100, 500]),
         0,
         Math.PI * 2
-      );     
+      );
     } else {
       this.context.arc(
         position.x,
