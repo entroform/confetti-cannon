@@ -207,7 +207,6 @@ jsControlsOpenElement.addEventListener('click', function () {
     updateSliders();
     controlsElement.classList.add('controls--animate-in');
   }
-
 }.bind(this));
 
 var jsControlsCloseElement = document.querySelector('.js-controls-close');

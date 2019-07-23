@@ -73,8 +73,8 @@ ConfettiCannon.prototype = {
   setup: function (callback) {
     if (this.isActive === false) {
       this.isActive = true;
-      this.populate();
       this.createCanvas(callback);
+      this.populate();
     }
   },
   // 7) Prepare, calculate, and initialize confetti objects.
@@ -122,23 +122,27 @@ ConfettiCannon.prototype = {
 
       this.context = this.canvasElement.getContext('2d');
 
-      if (Util.isHTMLElement(this.config.parentElement) === true)
-        this.config.parentElement.appendChild(this.canvasElement);
+      if (Util.isHTMLElement(this.config.parentElement) === true) {
+        if (this.config.parentElement.childElementCount > 0) {
+          this.config.parentElement.insertBefore(this.canvasElement, this.config.parentElement.childNodes[0]);
+        } else {
+          this.config.parentElement.appendChild(this.canvasElement);
+        }
+      }
 
       var result = this.config.updateFirePosition(this);
       if (Vector2.isPoint(result) === true)
         this.config.firePosition.equals(result);
     }
   },
+  setCanvasDimensionToWindow: function () {
+    this.setCanvasDimension(window.innerWidth, window.innerHeight);
+  },
   setCanvasDimension: function (width, height) {
+    this.canvasElement.style.width = width + 'px';
+    this.canvasElement.style.height = height + 'px';
     this.canvasElement.width = width * this.config.resolutionMultiplier;
     this.canvasElement.height = height * this.config.resolutionMultiplier;
-  },
-  setCanvasDimensionToWindow: function () {
-    this.canvasElement.style.width = window.innerWidth + 'px';
-    this.canvasElement.style.height = window.innerHeight + 'px';
-    this.canvasElement.width = window.innerWidth * this.config.resolutionMultiplier;
-    this.canvasElement.height = window.innerHeight * this.config.resolutionMultiplier;
   },
   getElementCenterVectorRelativeToCanvas: function (element) {
     var canvasRect = this.canvasElement.getBoundingClientRect();
