@@ -21,6 +21,7 @@
     "sass": "^1.22.7"
   },
   "dependencies": {
+    "@nekobird/rocket": "0.0.111",
     "controls": "^0.7.5"
   }
 }
