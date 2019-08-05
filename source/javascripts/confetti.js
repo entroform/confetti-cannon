@@ -1,5 +1,4 @@
 import {
-  Util,
   Num,
   Vector2,
 } from '@nekobird/rocket';
@@ -111,12 +110,10 @@ class Confetti {
     context.translate(-x, -y);
 
     context.beginPath();
-
     context.moveTo(x - (w / 2), y - (h / 2));
     context.lineTo(x + (w / 2), y - (h / 2));
     context.lineTo(x + (w / 2), y + (h / 2));
     context.lineTo(x - (w / 2), y + (h / 2));
-
     context.fillStyle = this.config.color;
     context.fill();
 

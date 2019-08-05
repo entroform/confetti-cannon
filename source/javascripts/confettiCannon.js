@@ -14,7 +14,7 @@ const CONFETTI_CANNON_DEFAULT_CONFIG = {
   parentElement: null,
   resolutionMultiplier: 1,
   zIndex: 0,
-  prepareCanvas: function (canvas, context) {},
+  prepareCanvas: (canvas, context) => {},
 
   // Confetti settings
   colorChoices: ['#80EAFF', '#FF0055', '#00FFAA', '#FFFF00'],
@@ -25,9 +25,7 @@ const CONFETTI_CANNON_DEFAULT_CONFIG = {
   // Cannon Settings
   // Warning firePosition is relative to canvas.
   firePosition: new Vector2(),
-  updateFirePosition: function () {
-    return false;
-  },
+  updateFirePosition: () => false,
 
   numberOfConfetti: 500,
   delay: 0,
@@ -43,9 +41,9 @@ const CONFETTI_CANNON_DEFAULT_CONFIG = {
   simplexOffsetMultiplier: 100,
 
   // Hooks
-  beforeFire: function () {},
-  onFire: function () {},
-  onComplete: function () {},
+  beforeFire: () => {},
+  onFire: () => {},
+  onComplete: () => {},
 };
 
 class ConfettiCannon {
@@ -131,11 +129,12 @@ class ConfettiCannon {
 
       this.context = this.canvasElement.getContext('2d');
 
-      if (DOMUtil.isHTMLElement(this.config.parentElement) === true) {
-        if (this.config.parentElement.childElementCount > 0) {
-          this.config.parentElement.insertBefore(this.canvasElement, this.config.parentElement.childNodes[0]);
+      const { parentElement } = this.config;
+      if (DOMUtil.isHTMLElement(parentElement) === true) {
+        if (parentElement.childElementCount > 0) {
+          parentElement.insertBefore(this.canvasElement, parentElement.childNodes[0]);
         } else {
-          this.config.parentElement.appendChild(this.canvasElement);
+          parentElement.appendChild(this.canvasElement);
         }
       }
 
@@ -150,17 +149,18 @@ class ConfettiCannon {
   }
 
   setCanvasDimension(width, height) {
+    const { resolutionMultiplier } = this.config;
     this.canvasElement.style.width = width + 'px';
     this.canvasElement.style.height = height + 'px';
-    this.canvasElement.width = width * this.config.resolutionMultiplier;
-    this.canvasElement.height = height * this.config.resolutionMultiplier;
+    this.canvasElement.width = width * resolutionMultiplier;
+    this.canvasElement.height = height * resolutionMultiplier;
   }
 
   getElementCenterVectorRelativeToCanvas(element) {
-    var canvasRect = this.canvasElement.getBoundingClientRect();
-    var elementRect = element.getBoundingClientRect();
-    var x = (elementRect.left - canvasRect.left) + (elementRect.width / 2);
-    var y = (elementRect.top - canvasRect.top) + (elementRect.height / 2);
+    const canvasRect = this.canvasElement.getBoundingClientRect();
+    const elementRect = element.getBoundingClientRect();
+    const x = (elementRect.left - canvasRect.left) + (elementRect.width / 2);
+    const y = (elementRect.top - canvasRect.top) + (elementRect.height / 2);
     return new Vector2(x, y);
   }
 
@@ -189,9 +189,9 @@ class ConfettiCannon {
   update() {
     this.clearCanvas();
 
-    var deadConfetti = 0;
-    var gravity = new Vector2(0, this.config.gravity);
-    for (var i = 0; i < this.confetti.length; i++) {
+    const deadConfetti = 0;
+    const gravity = new Vector2(0, this.config.gravity);
+    for (let i = 0; i < this.confetti.length; i++) {
       if (this.confetti[i].isAlive === true) {
         this.confetti[i].applyFriction(this.config.frictionCoefficient);
         this.confetti[i].applyDrag();

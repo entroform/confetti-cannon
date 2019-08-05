@@ -90,14 +90,10 @@ const sc_angle = new MonoKnobSlider({
   trackElement: sliderControlElementAngle.querySelector('.sliderControl__track'),
   knobElement: sliderControlElementAngle.querySelector('.sliderControl__knob'),
   valueElement: sliderControlElementAngle.querySelector('.sliderControl__value'),
-
   range: [0, Math.PI * 2],
-
-  onInit: function (slider) {
-    slider.value = (3 * Math.PI / 2);
-  },
-  onUpdate: function (slider) {
-    var value = slider.value;
+  onInit: slider => slider.value = (3 * Math.PI / 2),
+  onUpdate: slider => {
+    const { value } = slider;
     confettiCannon.config.angle = value;
     confettiCannonIndicator.config.angle = value;
     confettiCannonIndicator.display();
@@ -105,19 +101,15 @@ const sc_angle = new MonoKnobSlider({
   },
 });
 
-var sliderBlastArcControlElement = document.getElementById('sc_blastArc');
-var sc_blastArc = new MonoKnobSlider({
+const sliderBlastArcControlElement = document.getElementById('sc_blastArc');
+const sc_blastArc = new MonoKnobSlider({
   trackElement: sliderBlastArcControlElement.querySelector('.sliderControl__track'),
   knobElement: sliderBlastArcControlElement.querySelector('.sliderControl__knob'),
   valueElement: sliderBlastArcControlElement.querySelector('.sliderControl__value'),
-
   range: [0, Math.PI * 2],
-
-  onInit: function (slider) {
-    slider.value = (Math.PI / 2);
-  },
-  onUpdate: function (slider) {
-    var value = slider.value;
+  onInit: slider => slider.value = (Math.PI / 2),
+  onUpdate: slider => {
+    const { value }= slider;
     confettiCannon.config.blastArc = value;
     confettiCannonIndicator.config.arc = value;
     confettiCannonIndicator.display();
@@ -125,19 +117,15 @@ var sc_blastArc = new MonoKnobSlider({
   },
 });
 
-var sliderMaxPowerControlElement = document.getElementById('sc_maxPower');
-var sc_maxPower = new MonoKnobSlider({
+const sliderMaxPowerControlElement = document.getElementById('sc_maxPower');
+const sc_maxPower = new MonoKnobSlider({
   trackElement: sliderMaxPowerControlElement.querySelector('.sliderControl__track'),
   knobElement: sliderMaxPowerControlElement.querySelector('.sliderControl__knob'),
   valueElement: sliderMaxPowerControlElement.querySelector('.sliderControl__value'),
-
   range: [10, 150],
-
-  onInit: function (slider) {
-    slider.value = (50);
-  },
-  onUpdate: function (slider) {
-    var value = slider.value;
+  onInit: slider => slider.value = (50),
+  onUpdate: slider => {
+    const { value } = slider;
     confettiCannon.config.powerRange = [10, value];
     confettiCannonIndicator.config.power = value;
     confettiCannonIndicator.display();
@@ -145,44 +133,35 @@ var sc_maxPower = new MonoKnobSlider({
   },
 });
 
-var sliderNumberOfConfettiControlElement = document.getElementById('sc_numberOfConfetti');
-var sc_numberOfConfetti = new MonoKnobSlider({
+const sliderNumberOfConfettiControlElement = document.getElementById('sc_numberOfConfetti');
+const sc_numberOfConfetti = new MonoKnobSlider({
   trackElement: sliderNumberOfConfettiControlElement.querySelector('.sliderControl__track'),
   knobElement: sliderNumberOfConfettiControlElement.querySelector('.sliderControl__knob'),
   valueElement: sliderNumberOfConfettiControlElement.querySelector('.sliderControl__value'),
-
   range: [50, 10000],
-
-  onInit: function (slider) {
-    slider.value = (500);
-  },
-  onUpdate: function (slider) {
-    var value = slider.value;
+  onInit: slider => slider.value = (500),
+  onUpdate: slider => {
+    const { value } = slider;
     confettiCannon.config.numberOfConfetti = Math.floor(value);
     slider.config.valueElement.textContent = Math.floor(value);
   },
 });
 
-
-var sliderGravityControlElement = document.getElementById('sc_gravity');
-var sc_gravity = new MonoKnobSlider({
+const sliderGravityControlElement = document.getElementById('sc_gravity');
+const sc_gravity = new MonoKnobSlider({
   trackElement: sliderGravityControlElement.querySelector('.sliderControl__track'),
   knobElement: sliderGravityControlElement.querySelector('.sliderControl__knob'),
   valueElement: sliderGravityControlElement.querySelector('.sliderControl__value'),
-
   range: [-2, 2],
-
-  onInit: function (slider) {
-    slider.value = (1);
-  },
-  onUpdate: function (slider) {
-    var value = slider.value;
+  onInit: slider => slider.value = (1),
+  onUpdate: slider => {
+    const { value } = slider;
     confettiCannon.config.gravity = value;
     slider.config.valueElement.textContent = value.toFixed(2);
   },
 });
 
-var updateSliders = function () {
+const updateSliders = () => {
   sc_angle.update();
   sc_blastArc.update();
   sc_gravity.update();
@@ -192,9 +171,9 @@ var updateSliders = function () {
 
 // Controls
 
-var controlsIsOpen = false;
-var controlsElement = document.querySelector('.controls');
-var jsControlsOpenElement = document.querySelector('.js-controls-open');
+const controlsIsOpen = false;
+const controlsElement = document.querySelector('.controls');
+const jsControlsOpenElement = document.querySelector('.js-controls-open');
 jsControlsOpenElement.addEventListener('click', function () {
   if (controlsIsOpen === false) {
     controlsIsOpen = true;
@@ -206,27 +185,25 @@ jsControlsOpenElement.addEventListener('click', function () {
   }
 }.bind(this));
 
-var jsControlsCloseElement = document.querySelector('.js-controls-close');
+const jsControlsCloseElement = document.querySelector('.js-controls-close');
 
-var closeControlsElement = function () {
+const closeControlsElement = () => {
   if (controlsIsOpen === true) {
     controlsElement.classList.remove('controls--animate-in');
     controlsElement.classList.add('controls--animate-out');
-    setTimeout(function () {
+    setTimeout(() => {
       controlsElement.classList.remove('controls--active');
       jsControlsOpenElement.style.display = 'block';
       controlsIsOpen = false;
-    }.bind(this), 200);
+    }, 200);
   }
 }
 
-jsControlsCloseElement.addEventListener('click', function () {
-  closeControlsElement();
-}.bind(this));
+jsControlsCloseElement.addEventListener('click', () => closeControlsElement());
 
-window.addEventListener('keyup', function (event) {
+window.addEventListener('keyup', event => {
   if (
-    controlsIsOpen === true &&
-    event.keyCode === 27
+    controlsIsOpen === true
+    && event.keyCode === 27
   ) closeControlsElement();
 });
