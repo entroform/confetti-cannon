@@ -1,27 +1,27 @@
 {
   "name": "confetti-cannon",
   "version": "1.0.0",
-  "author": "Andrew Prasetya",
   "description": "",
   "keywords": [],
-  "license": "ISC",
-  "main": "source/main.js",
   "repository": {
     "type": "git",
     "url": "git://github.com/nekobird/confetti-cannon.git"
   },
+  "license": "ISC",
+  "author": "Andrew Prasetya",
+  "main": "source/main.js",
   "scripts": {
-    "start": "parcel ./source/index.html",
     "build": "rm -r ./docs; parcel build ./source/index.html --out-dir docs --public-url ./",
+    "start": "parcel ./source/index.html",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "browserslist": "> 1%, not dead",
+  "dependencies": {
+    "@nekobird/rocket": "0.0.115"
   },
   "devDependencies": {
     "autoprefixer": "^9.6.1",
     "cssnano": "^4.1.10",
     "sass": "^1.22.7"
-  },
-  "dependencies": {
-    "@nekobird/rocket": "0.0.111",
-    "controls": "^0.7.5"
   }
 }

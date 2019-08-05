@@ -1,32 +1,36 @@
-import {
-  Util,
-  Num,
-  Vector2,
-} from '@nekobird/rocket';
-
+import Util from './util';
+import Vector2 from './vector2';
 import SimplexNoise from './noise';
 
 // @Confetti
-const CONFETTI_DEFAULT_CONFIG = {
+var CONFETTI_DEFAULT_CONFIG = {
   color: 'white',
+
   height: 20,
   width: 20,
+
   mass: 1,
   life: 100,
+
   startPosition: new Vector2(),
   startVelocity: new Vector2(),
+
   frictionCoefficient: 0,
   dragCoefficient: 0,
+
   simplexZoomMultiplier: 100,
   simplexXOffset: 0,
   simplexYOffset: 0,
 };
 
-class Confetti {
+var Confetti = function(config) {
+  this.init(config);
+};
 
+Confetti.prototype = {
   // 1) Initialize properties and set config.
-  constructor(config) {
-    this.config = Object.assign({}, CONFETTI_DEFAULT_CONFIG);
+  init: function(config) {
+    this.config = Util.objectAssign({}, CONFETTI_DEFAULT_CONFIG);
     this.setConfig(config);
 
     this.isAlive = true;
@@ -40,68 +44,62 @@ class Confetti {
     this.angleVelocity = 0.4;
     this.angleAcceleration = 0;
 
-    this.simplex = new SimplexNoise;
-  }
-
+    this.simplex = new SimplexNoise();
+  },
   // 2) Set coin config.
-  setConfig(config) {
-    if (typeof config === 'object') Object.assign(this.config, config);
+  setConfig: function(config) {
+    if (typeof config === 'object') Util.objectAssign(this.config, config);
     this.life = this.config.life;
-  }
-
-  applyFriction(frictionCoefficient) {
-    const friction = typeof frictionCoefficient === 'number' ? frictionCoefficient : this.config.frictionCoefficient;
+  },
+  applyFriction: function(frictionCoefficient) {
+    var friction = typeof frictionCoefficient === 'number' ? frictionCoefficient : this.config.frictionCoefficient;
     if (friction !== 0) {
-      const force = this.velocity.clone.multiply(-1).normalize().multiply(friction);
+      var force = this.velocity.clone().multiply(-1).normalize().multiply(friction);
       this.applyForce(force);
     }
-  }
-
-  applyDrag() {
-    const speed = this.velocity.magnitude;
-    const dragMagnitude = this.config.dragCoefficient * speed * speed;
-    const force = this.velocity.clone.multiply(-1).normalize().multiply(dragMagnitude);
+  },
+  applyDrag: function() {
+    var speed = this.velocity.magnitude();
+    var dragMagnitude = this.config.dragCoefficient * speed * speed;
+    var force = this.velocity.clone().multiply(-1).normalize().multiply(dragMagnitude);
     this.applyForce(force);
-  }
-
-  applyLateralEntropy(t) {
-    const zoom = this.config.simplexZoomMultiplier;
+  },
+  applyLateralEntropy: function(t) {
+    var zoom = this.config.simplexZoomMultiplier;
     if (zoom === 0) zoom = 1;
-    const x = this.simplex.noise(
+    var x = this.simplex.noise(
       this.config.simplexXOffset + (t / zoom),
       this.config.simplexYOffset
     );
-    const lateralOscillation = new Vector2(x, 0);
+    var lateralOscillation = new Vector2(x, 0);
     this.applyForce(lateralOscillation);
-  }
-
-  applyForce(force) {
+  },
+  applyForce: function(force) {
     force.divide(this.config.mass);
     this.acceleration.add(force);
     return this;
-  }
-
-  update() {
+  },
+  update: function() {
     this.life--;
     if (this.life <= 0) this.isAlive = false;
     this.velocity
-    .add(this.acceleration)
-    .limit(this.config.maximumSpeed);
+      .add(this.acceleration)
+      .limit(this.config.maximumSpeed);
     this.position.add(this.velocity);
     this.acceleration.multiply(0);
 
     this.angleVelocity += this.angleAcceleration;
-    this.angleVelocity = Num.constrain(this.angleVelocity, [-0.1, 0.1]);
+    this.angleVelocity = Util.constrain(this.angleVelocity, [-0.1, 0.1]);
     this.angle += this.angleVelocity;
     return this;
-  }
+  },
+  draw: function(context, m) {
 
-  draw(context, m) {
-    const x = this.position.x * m;
-    const y = this.position.y * m;
+    var x = this.position.x * m;
+    var y = this.position.y * m;
 
-    const w = this.config.width * m;
-    const h = this.config.height * m;
+    var w = this.config.width * m;
+    var h = this.config.height * m;
 
     context.save();
 
@@ -121,12 +119,11 @@ class Confetti {
     context.fill();
 
     context.restore();
-  }
-
-  die() {
+  },
+  die: function() {
     this.life = 0;
     this.isAlive = false;
-  }
+  },
 }
 
 export default Confetti;

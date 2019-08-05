@@ -1,41 +1,41 @@
-import {
-  Num,
-  Vector2,
-} from '@nekobird/rocket';
+import Util from './util';
+import Vector2 from './vector2';
 
-const CONFETTI_CANNON_INDICATOR_DEFAULT_CONFIG = {
+var CONFETTI_CANNON_INDICATOR_DEFAULT_CONFIG = {
   canvasElement: undefined,
   angle: 0,
   arc: Math.PI / 4,
   power: 10,
-  getCannonPosition: () => new Vector2,
+  getCannonPosition: function () {
+    return new Vector2();
+  },
 };
 
-class ConfettiCannonIndicator {
+var ConfettiCannonIndicator = function (config) {
+  this.init(config);
+}
 
-  constructor(config) {
-    this.config = Object.assign({}, CONFETTI_CANNON_INDICATOR_DEFAULT_CONFIG);
+ConfettiCannonIndicator.prototype = {
+  init: function (config) {
+    this.config = Util.objectAssign({}, CONFETTI_CANNON_INDICATOR_DEFAULT_CONFIG);
     this.setConfig(config);
 
     this.context = this.config.canvasElement.getContext('2d');
 
     this.listen();
-  }
-
-  setConfig(config) {
-    if (typeof config === 'object') Object.assign(this.config, config);
-  }
-
-  updateCanvas() {
+  },
+  setConfig: function (config) {
+    if (typeof config === 'object') Util.objectAssign(this.config, config);
+  },
+  updateCanvas: function () {
     this.config.canvasElement.width = window.innerWidth;
     this.config.canvasElement.height = window.innerHeight;
-  }
-
-  display() {
+  },
+  display: function () {
     this.updateCanvas();
     var position = this.config.getCannonPosition();
 
-    var length = Num.hypotenuse(
+    var length = Util.hypotenuse(
       this.config.canvasElement.offsetWidth,
       this.config.canvasElement.offsetHeight
     );
@@ -90,21 +90,20 @@ class ConfettiCannonIndicator {
       this.context.arc(
         position.x,
         position.y,
-        Num.modulate(this.config.power, [10, 150], [100, 500]),
-        Num.cycle(this.config.angle - this.config.arc / 2, Math.PI * 2),
-        Num.cycle(this.config.angle + this.config.arc / 2, Math.PI * 2)
+        Util.modulate(this.config.power, [10, 150], [100, 500]),
+        Util.cycleNumber(this.config.angle - this.config.arc / 2, Math.PI * 2),
+        Util.cycleNumber(this.config.angle + this.config.arc / 2, Math.PI * 2)
       );
     }
     this.context.strokeStyle = 'hsla(340, 100%, 50%, 0.5)';
     this.context.stroke();
-  }
-
-  listen() {
-    window.addEventListener('resize', () => {
+  },
+  listen: function () {
+    window.addEventListener('resize', function () {
       this.updateCanvas();
       this.display();
-    });
-  }
-}
+    }.bind(this));
+  },
+};
 
 export default ConfettiCannonIndicator;
