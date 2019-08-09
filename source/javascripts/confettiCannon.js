@@ -16,7 +16,7 @@ const CONFETTI_CANNON_DEFAULT_CONFIG = {
   lifeSpanRange: [100, 200],
 
   // Cannon Settings
-  // Warning firePosition is relative to canvas.
+  // Warning: firePosition is relative to canvas.
   firePosition: new Vector2(),
   updateFirePosition: () => false,
 
@@ -40,7 +40,7 @@ const CONFETTI_CANNON_DEFAULT_CONFIG = {
 };
 
 class ConfettiCannon {
-  // 1) Initialize properties and stuff.
+
   constructor(config) {
     this.config = Object.assign({}, CONFETTI_CANNON_DEFAULT_CONFIG);
     this.setConfig(config);
@@ -51,7 +51,6 @@ class ConfettiCannon {
     this.updateCount = 0;
   }
 
-  // 2) Set config.
   setConfig(config) {
     if (typeof config === 'object') Object.assign(this.config, config);
     if (this.config.numberOfConfetti < 0) this.config.numberOfConfetti = 0;
@@ -59,13 +58,11 @@ class ConfettiCannon {
     if (this.config.delay < 0) this.config.delay = 0;
   }
 
-  // 3) Trigger Start.
   fire() {
     this.setup();
     this.begin();
   }
 
-  // 4) Setup target vectors, initialize coin objects, and create canvas.
   setup(callback) {
     if (this.isActive === false) {
       this.isActive = true;
@@ -74,7 +71,6 @@ class ConfettiCannon {
     }
   }
 
-  // 7) Prepare, calculate, and initialize confetti objects.
   populate() {
     this.confetti = [];
     for (let i = 0; i < this.config.numberOfConfetti; i++) {
@@ -143,8 +139,8 @@ class ConfettiCannon {
 
   setCanvasDimension(width, height) {
     const { resolutionMultiplier } = this.config;
-    this.canvasElement.style.width = width + 'px';
-    this.canvasElement.style.height = height + 'px';
+    this.canvasElement.style.width = `${width}px`;
+    this.canvasElement.style.height = `${height}px`;
     this.canvasElement.width = width * resolutionMultiplier;
     this.canvasElement.height = height * resolutionMultiplier;
   }
@@ -157,7 +153,6 @@ class ConfettiCannon {
     return new Vector2(x, y);
   }
 
-  // 10) This is called once canvasElement is defined and is in the DOM. Start animation!
   begin() {
     if (this.isActive === true) {
       this.startAnimation();
@@ -165,7 +160,6 @@ class ConfettiCannon {
     }
   }
 
-  // 11) Initialize animation object and start it.
   startAnimation() {
     this.updateCount = 0;
     this.config.beforeFire(this);
@@ -178,26 +172,26 @@ class ConfettiCannon {
     this.animation.play();
   }
 
-  // 12) Loop through each coins and draw them.
   update() {
     this.clearCanvas();
 
     const deadConfetti = 0;
     const gravity = new Vector2(0, this.config.gravity);
     for (let i = 0; i < this.confetti.length; i++) {
-      if (this.confetti[i].isAlive === true) {
-        this.confetti[i].applyFriction(this.config.frictionCoefficient);
-        this.confetti[i].applyDrag();
-        this.confetti[i].applyForce(gravity);
-        this.confetti[i].applyLateralEntropy(this.updateCount);
-        this.confetti[i].update();
-        this.confetti[i].draw(this.context, this.config.resolutionMultiplier);
-
+      const confetti = this.confetti[i];
+      if (confetti.isAlive === true) {
+        confetti.applyFriction(this.config.frictionCoefficient);
+        confetti.applyDrag();
+        confetti.applyForce(gravity);
+        confetti.applyLateralEntropy(this.updateCount);
+        confetti.update();
+        confetti.draw(this.context, this.config.resolutionMultiplier);
         if (
-          this.confetti[i].position.y + this.confetti[i].config.height >
+          confetti.position.y + confetti.config.height >
           this.canvasElement.height
-        )
-          this.confetti[i].die();
+        ) {
+          confetti.die();
+        }
       } else {
         deadConfetti++;
       }
@@ -206,13 +200,12 @@ class ConfettiCannon {
     if (deadConfetti === this.confetti.length) this.end();
   }
 
-  // 13) Helper function to clear canvas every frame.
   clearCanvas() {
-    if (typeof this.canvasElement === 'object')
+    if (typeof this.canvasElement === 'object') {
       this.context.clearRect(0, 0, this.canvasElement.width, this.canvasElement.height);
+    }
   }
 
-  // 15) This is called after the last coin reached the end. Or if numberOfCoins is 0. Sayonara!
   end() {
     this.clearCanvas();
     this.animation.stop();

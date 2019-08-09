@@ -19,14 +19,13 @@ const CONFETTI_DEFAULT_CONFIG = {
 };
 
 class Confetti {
-  // 1) Initialize properties and set config.
+
   constructor(config) {
     this.config = Object.assign({}, CONFETTI_DEFAULT_CONFIG);
     this.setConfig(config);
 
     this.isAlive = true;
 
-    // Vector2
     this.position = new Vector2().equals(this.config.startPosition);
     this.velocity = new Vector2().equals(this.config.startVelocity);
     this.acceleration = new Vector2();
@@ -38,7 +37,6 @@ class Confetti {
     this.simplex = new SimplexNoise();
   }
 
-  // 2) Set coin config.
   setConfig(config) {
     if (typeof config === 'object') Object.assign(this.config, config);
     this.life = this.config.life;

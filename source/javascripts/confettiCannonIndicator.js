@@ -23,37 +23,42 @@ class ConfettiCannonIndicator {
   }
 
   updateCanvas() {
-    this.config.canvasElement.width = window.innerWidth;
-    this.config.canvasElement.height = window.innerHeight;
+    const { canvasElement } = this.config;
+    canvasElement.width = window.innerWidth;
+    canvasElement.height = window.innerHeight;
   }
 
   display() {
     this.updateCanvas();
+
+    const { canvasElement, angle, arc, power } = this.config;
+
     const position = this.config.getCannonPosition();
 
-    const length = Num.hypotenuse(
-      this.config.canvasElement.offsetWidth,
-      this.config.canvasElement.offsetHeight,
+    let length = Num.hypotenuse(
+      canvasElement.offsetWidth,
+      canvasElement.offsetHeight,
     );
+
     length = length / 2;
 
     const target = new Vector2(0, 1)
-      .rotateTo(this.config.angle)
+      .rotateTo(angle)
       .normalize()
       .multiply(length)
       .add(position);
     const left = new Vector2(0, 1)
-      .rotateTo(this.config.angle - this.config.arc / 2)
+      .rotateTo(angle - arc / 2)
       .normalize()
       .multiply(length)
       .add(position);
     const right = new Vector2(0, 1)
-      .rotateTo(this.config.angle + this.config.arc / 2)
+      .rotateTo(angle + arc / 2)
       .normalize()
       .multiply(length)
       .add(position);
 
-    if (this.config.arc !== Math.PI * 2) {
+    if (arc !== Math.PI * 2) {
       const gradient = this.context.createLinearGradient(
         position.x,
         position.y,
@@ -77,7 +82,6 @@ class ConfettiCannonIndicator {
       this.context.lineTo(right.x, right.y);
       this.context.strokeStyle = gradient0;
       this.context.stroke();
-      // this.context.restore();
 
       const gradient1 = this.context.createLinearGradient(position.x, position.y, left.x, left.y);
       gradient1.addColorStop(0, 'hsla(340, 100%, 50%, 0)');
@@ -87,15 +91,14 @@ class ConfettiCannonIndicator {
       this.context.lineTo(left.x, left.y);
       this.context.strokeStyle = gradient1;
       this.context.stroke();
-      // this.context.restore();
     }
 
     this.context.beginPath();
-    if (this.config.arc === Math.PI * 2) {
+    if (arc === Math.PI * 2) {
       this.context.arc(
         position.x,
         position.y,
-        Num.modulate(this.config.power, [10, 150], [100, 500], true),
+        Num.modulate(power, [10, 150], [100, 500], true),
         0,
         Math.PI * 2,
       );
@@ -103,9 +106,9 @@ class ConfettiCannonIndicator {
       this.context.arc(
         position.x,
         position.y,
-        Num.modulate(this.config.power, [10, 150], [100, 500], true),
-        Num.cycle(this.config.angle - this.config.arc / 2, Math.PI * 2),
-        Num.cycle(this.config.angle + this.config.arc / 2, Math.PI * 2),
+        Num.modulate(power, [10, 150], [100, 500], true),
+        Num.cycle(angle - arc / 2, Math.PI * 2),
+        Num.cycle(angle + arc / 2, Math.PI * 2),
       );
     }
     this.context.strokeStyle = 'hsla(340, 100%, 50%, 0.5)';
