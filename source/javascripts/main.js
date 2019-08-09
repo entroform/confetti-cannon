@@ -1,4 +1,5 @@
-import { MonoKnobSlider, Vector2 } from '@nekobird/rocket';
+import { Vector2 } from '@nekobird/rocket';
+import { MonoKnobSlider } from '@nekobird/controls';
 
 import ConfettiCannon from './confettiCannon';
 
@@ -167,22 +168,19 @@ const updateSliders = () => {
 
 // Controls
 
-const controlsIsOpen = false;
+let controlsIsOpen = false;
 const controlsElement = document.querySelector('.controls');
 const jsControlsOpenElement = document.querySelector('.js-controls-open');
-jsControlsOpenElement.addEventListener(
-  'click',
-  function() {
-    if (controlsIsOpen === false) {
-      controlsIsOpen = true;
-      controlsElement.classList.remove('controls--animate-out');
-      jsControlsOpenElement.style.display = 'none';
-      controlsElement.classList.add('controls--active');
-      updateSliders();
-      controlsElement.classList.add('controls--animate-in');
-    }
-  }.bind(this),
-);
+jsControlsOpenElement.addEventListener('click', () => {
+  if (controlsIsOpen === false) {
+    controlsIsOpen = true;
+    controlsElement.classList.remove('controls--animate-out');
+    jsControlsOpenElement.style.display = 'none';
+    controlsElement.classList.add('controls--active');
+    updateSliders();
+    controlsElement.classList.add('controls--animate-in');
+  }
+});
 
 const jsControlsCloseElement = document.querySelector('.js-controls-close');
 

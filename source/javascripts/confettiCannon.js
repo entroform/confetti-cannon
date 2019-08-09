@@ -164,7 +164,9 @@ class ConfettiCannon {
     this.updateCount = 0;
     this.config.beforeFire(this);
     this.animation = new Animation({
-      delay: this.config.delay / 1000,
+      timeUnit: 'ms',
+      delay: this.config.delay,
+      duration: 200,
       numberOfIterations: 'infinite',
       onStart: () => this.config.onFire(this),
       onTick: t => this.update(),
@@ -175,17 +177,19 @@ class ConfettiCannon {
   update() {
     this.clearCanvas();
 
-    const deadConfetti = 0;
-    const gravity = new Vector2(0, this.config.gravity);
+    const { gravity, frictionCoefficient, resolutionMultiplier } = this.config;
+
+    let deadConfetti = 0;
+    const gravityVector = new Vector2(0, gravity);
     for (let i = 0; i < this.confetti.length; i++) {
       const confetti = this.confetti[i];
       if (confetti.isAlive === true) {
-        confetti.applyFriction(this.config.frictionCoefficient);
+        confetti.applyFriction(frictionCoefficient);
         confetti.applyDrag();
-        confetti.applyForce(gravity);
+        confetti.applyForce(gravityVector);
         confetti.applyLateralEntropy(this.updateCount);
         confetti.update();
-        confetti.draw(this.context, this.config.resolutionMultiplier);
+        confetti.draw(this.context, resolutionMultiplier);
         if (
           confetti.position.y + confetti.config.height >
           this.canvasElement.height
@@ -197,7 +201,7 @@ class ConfettiCannon {
       }
     }
     this.updateCount++;
-    if (deadConfetti === this.confetti.length) this.end();
+    if (deadConfetti >= this.confetti.length) this.end();
   }
 
   clearCanvas() {
@@ -207,8 +211,8 @@ class ConfettiCannon {
   }
 
   end() {
-    this.clearCanvas();
     this.animation.stop();
+    this.clearCanvas();
     this.canvasElement.remove();
     this.canvasElement = undefined;
     this.confetti = [];
