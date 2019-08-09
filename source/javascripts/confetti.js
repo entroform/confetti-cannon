@@ -1,7 +1,4 @@
-import {
-  Num,
-  Vector2,
-} from '@nekobird/rocket';
+import { Num, Vector2 } from '@nekobird/rocket';
 
 import SimplexNoise from './noise';
 
@@ -22,7 +19,6 @@ const CONFETTI_DEFAULT_CONFIG = {
 };
 
 class Confetti {
-
   // 1) Initialize properties and set config.
   constructor(config) {
     this.config = Object.assign({}, CONFETTI_DEFAULT_CONFIG);
@@ -39,7 +35,7 @@ class Confetti {
     this.angleVelocity = 0.4;
     this.angleAcceleration = 0;
 
-    this.simplex = new SimplexNoise;
+    this.simplex = new SimplexNoise();
   }
 
   // 2) Set coin config.
@@ -49,9 +45,15 @@ class Confetti {
   }
 
   applyFriction(frictionCoefficient) {
-    const friction = typeof frictionCoefficient === 'number' ? frictionCoefficient : this.config.frictionCoefficient;
+    const friction =
+      typeof frictionCoefficient === 'number'
+        ? frictionCoefficient
+        : this.config.frictionCoefficient;
     if (friction !== 0) {
-      const force = this.velocity.clone.multiply(-1).normalize().multiply(friction);
+      const force = this.velocity.clone
+        .multiply(-1)
+        .normalize()
+        .multiply(friction);
       this.applyForce(force);
     }
   }
@@ -59,17 +61,17 @@ class Confetti {
   applyDrag() {
     const speed = this.velocity.magnitude;
     const dragMagnitude = this.config.dragCoefficient * speed * speed;
-    const force = this.velocity.clone.multiply(-1).normalize().multiply(dragMagnitude);
+    const force = this.velocity.clone
+      .multiply(-1)
+      .normalize()
+      .multiply(dragMagnitude);
     this.applyForce(force);
   }
 
   applyLateralEntropy(t) {
     const zoom = this.config.simplexZoomMultiplier;
     if (zoom === 0) zoom = 1;
-    const x = this.simplex.noise(
-      this.config.simplexXOffset + (t / zoom),
-      this.config.simplexYOffset
-    );
+    const x = this.simplex.noise(this.config.simplexXOffset + t / zoom, this.config.simplexYOffset);
     const lateralOscillation = new Vector2(x, 0);
     this.applyForce(lateralOscillation);
   }
@@ -83,9 +85,7 @@ class Confetti {
   update() {
     this.life--;
     if (this.life <= 0) this.isAlive = false;
-    this.velocity
-    .add(this.acceleration)
-    .limit(this.config.maximumSpeed);
+    this.velocity.add(this.acceleration).limit(this.config.maximumSpeed);
     this.position.add(this.velocity);
     this.acceleration.multiply(0);
 
@@ -110,10 +110,10 @@ class Confetti {
     context.translate(-x, -y);
 
     context.beginPath();
-    context.moveTo(x - (w / 2), y - (h / 2));
-    context.lineTo(x + (w / 2), y - (h / 2));
-    context.lineTo(x + (w / 2), y + (h / 2));
-    context.lineTo(x - (w / 2), y + (h / 2));
+    context.moveTo(x - w / 2, y - h / 2);
+    context.lineTo(x + w / 2, y - h / 2);
+    context.lineTo(x + w / 2, y + h / 2);
+    context.lineTo(x - w / 2, y + h / 2);
     context.fillStyle = this.config.color;
     context.fill();
 

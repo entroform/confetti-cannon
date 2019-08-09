@@ -1,18 +1,14 @@
-import {
-  Num,
-  Vector2,
-} from '@nekobird/rocket';
+import { Num, Vector2 } from '@nekobird/rocket';
 
 const CONFETTI_CANNON_INDICATOR_DEFAULT_CONFIG = {
   canvasElement: undefined,
   angle: 0,
   arc: Math.PI / 4,
   power: 10,
-  getCannonPosition: () => new Vector2,
+  getCannonPosition: () => new Vector2(),
 };
 
 class ConfettiCannonIndicator {
-
   constructor(config) {
     this.config = Object.assign({}, CONFETTI_CANNON_INDICATOR_DEFAULT_CONFIG);
     this.setConfig(config);
@@ -37,16 +33,33 @@ class ConfettiCannonIndicator {
 
     const length = Num.hypotenuse(
       this.config.canvasElement.offsetWidth,
-      this.config.canvasElement.offsetHeight
+      this.config.canvasElement.offsetHeight,
     );
     length = length / 2;
 
-    const target = new Vector2(0, 1).rotateTo(this.config.angle).normalize().multiply(length).add(position);
-    const left = new Vector2(0, 1).rotateTo(this.config.angle - (this.config.arc / 2)).normalize().multiply(length).add(position);
-    const right = new Vector2(0, 1).rotateTo(this.config.angle + (this.config.arc / 2)).normalize().multiply(length).add(position);
+    const target = new Vector2(0, 1)
+      .rotateTo(this.config.angle)
+      .normalize()
+      .multiply(length)
+      .add(position);
+    const left = new Vector2(0, 1)
+      .rotateTo(this.config.angle - this.config.arc / 2)
+      .normalize()
+      .multiply(length)
+      .add(position);
+    const right = new Vector2(0, 1)
+      .rotateTo(this.config.angle + this.config.arc / 2)
+      .normalize()
+      .multiply(length)
+      .add(position);
 
     if (this.config.arc !== Math.PI * 2) {
-      const gradient = this.context.createLinearGradient(position.x, position.y, target.x, target.y);
+      const gradient = this.context.createLinearGradient(
+        position.x,
+        position.y,
+        target.x,
+        target.y,
+      );
       gradient.addColorStop(0, 'hsla(340, 100%, 50%, 0)');
       gradient.addColorStop(1, 'hsla(340, 100%, 50%, 1)');
       this.context.save();
@@ -84,7 +97,7 @@ class ConfettiCannonIndicator {
         position.y,
         Num.modulate(this.config.power, [10, 150], [100, 500], true),
         0,
-        Math.PI * 2
+        Math.PI * 2,
       );
     } else {
       this.context.arc(

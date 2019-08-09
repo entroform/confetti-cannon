@@ -12,6 +12,7 @@
   "main": "source/main.js",
   "scripts": {
     "build": "rm -r ./docs; parcel build ./source/index.html --out-dir docs --public-url ./",
+    "prettier": "prettier --write 'source/**/*.js'",
     "start": "parcel ./source/index.html",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -27,6 +28,7 @@
     "@babel/preset-typescript": "^7.3.3",
     "autoprefixer": "^9.6.1",
     "cssnano": "^4.1.10",
+    "prettier": "^1.18.2",
     "sass": "^1.22.7"
   }
 }

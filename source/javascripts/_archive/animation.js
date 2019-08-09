@@ -7,23 +7,23 @@ var ANIMATION_DEFAULT_CONFIG = {
   // until stop() is called.
   duration: 1000,
   delay: 0,
-  timingFunction: function (t) {
-    return t
+  timingFunction: function(t) {
+    return t;
   },
 
   // Hooks.
-  onTick: function () {},
-  beforeStart: function () {},
-  onStart: function () {},
-  onComplete: function () {},
+  onTick: function() {},
+  beforeStart: function() {},
+  onStart: function() {},
+  onComplete: function() {},
 };
 
-var Animation = function (config) {
+var Animation = function(config) {
   this.init(config);
 };
 
 Animation.prototype = {
-  init: function (config) {
+  init: function(config) {
     this.config = Util.objectAssign({}, ANIMATION_DEFAULT_CONFIG);
     this.setConfig(config);
 
@@ -38,10 +38,10 @@ Animation.prototype = {
 
     this.progress = 0;
   },
-  setConfig: function (config) {
+  setConfig: function(config) {
     if (typeof config === 'object') Util.objectAssign(this.config, config);
   },
-  updateProgress: function () {
+  updateProgress: function() {
     if (typeof this.config.duration === 'number') {
       var now = Date.now();
       this.progress = (now - this.timeStart) / this.config.duration;
@@ -52,7 +52,7 @@ Animation.prototype = {
       this.progress = 1;
     }
   },
-  loop: function () {
+  loop: function() {
     if (this.isAnimating === true) {
       this.updateProgress();
       this.config.onTick(this.config.timingFunction(this.progress));
@@ -63,25 +63,28 @@ Animation.prototype = {
       }
     }
   },
-  continueLoop: function () {
+  continueLoop: function() {
     if (this.isAnimating === true) {
       window.cancelAnimationFrame(this.rafID);
       this.rafID = window.requestAnimationFrame(this.loop.bind(this));
     }
   },
-  play: function () {
+  play: function() {
     if (this.isActive === false) {
       this.isActive = true;
       this.config.beforeStart(this);
-      this.timeoutID = setTimeout(function () {
-        this.isAnimating = true;
-        this.timeStart = Date.now();
-        this.config.onStart(this);
-        this.continueLoop();
-      }.bind(this), this.config.delay);
+      this.timeoutID = setTimeout(
+        function() {
+          this.isAnimating = true;
+          this.timeStart = Date.now();
+          this.config.onStart(this);
+          this.continueLoop();
+        }.bind(this),
+        this.config.delay,
+      );
     }
   },
-  stop: function () {
+  stop: function() {
     if (this.isActive === true) {
       window.cancelAnimationFrame(this.rafID);
       clearTimeout(this.timeoutID);
@@ -92,6 +95,6 @@ Animation.prototype = {
       this.config.onComplete(this);
     }
   },
-}
+};
 
 export default Animation;

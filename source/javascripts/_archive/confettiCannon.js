@@ -8,7 +8,7 @@ var CONFETTI_CANNON_DEFAULT_CONFIG = {
   parentElement: null,
   resolutionMultiplier: 1,
   zIndex: 0,
-  prepareCanvas: function (canvas, context) {},
+  prepareCanvas: function(canvas, context) {},
 
   // Confetti settings
   colorChoices: ['#80EAFF', '#FF0055', '#00FFAA', '#FFFF00'],
@@ -19,13 +19,13 @@ var CONFETTI_CANNON_DEFAULT_CONFIG = {
   // Cannon Settings
   // Warning firePosition is relative to canvas.
   firePosition: new Vector2(),
-  updateFirePosition: function () {
+  updateFirePosition: function() {
     return false;
   },
 
   numberOfConfetti: 500,
   delay: 0,
-  angle: 3 * Math.PI / 2,
+  angle: (3 * Math.PI) / 2,
   blastArc: Math.PI / 2,
   powerRange: [2, 40],
 
@@ -37,18 +37,18 @@ var CONFETTI_CANNON_DEFAULT_CONFIG = {
   simplexOffsetMultiplier: 100,
 
   // Hooks
-  beforeFire: function () {},
-  onFire: function () {},
-  onComplete: function () {},
+  beforeFire: function() {},
+  onFire: function() {},
+  onComplete: function() {},
 };
 
-var ConfettiCannon = function (config) {
+var ConfettiCannon = function(config) {
   this.init(config);
 };
 
 ConfettiCannon.prototype = {
   // 1) Initialize properties and stuff.
-  init: function (config) {
+  init: function(config) {
     this.config = Util.objectAssign({}, CONFETTI_CANNON_DEFAULT_CONFIG);
     this.setConfig(config);
 
@@ -58,19 +58,19 @@ ConfettiCannon.prototype = {
     this.updateCount = 0;
   },
   // 2) Set config.
-  setConfig: function (config) {
+  setConfig: function(config) {
     if (typeof config === 'object') Util.objectAssign(this.config, config);
     if (this.config.numberOfConfetti < 0) this.config.numberOfConfetti = 0;
     if (this.config.resolutionMultiplier < 1) this.config.resolutionMultiplier = 1;
     if (this.config.delay < 0) this.config.delay = 0;
   },
   // 3) Trigger Start.
-  fire: function () {
+  fire: function() {
     this.setup();
     this.begin();
   },
   // 4) Setup target vectors, initialize coin objects, and create canvas.
-  setup: function (callback) {
+  setup: function(callback) {
     if (this.isActive === false) {
       this.isActive = true;
       this.createCanvas(callback);
@@ -78,7 +78,7 @@ ConfettiCannon.prototype = {
     }
   },
   // 7) Prepare, calculate, and initialize confetti objects.
-  populate: function () {
+  populate: function() {
     this.confetti = [];
     for (var i = 0; i < this.config.numberOfConfetti; i++) {
       var config = this.generateConfettiConfig();
@@ -86,7 +86,7 @@ ConfettiCannon.prototype = {
     }
   },
   // 8) This factory function generates config for each coin object.
-  generateConfettiConfig: function () {
+  generateConfettiConfig: function() {
     return {
       color: Util.randomChoice(this.config.colorChoices),
       life: Util.modulate(Math.random(), 1, this.config.lifeSpanRange),
@@ -94,20 +94,26 @@ ConfettiCannon.prototype = {
       startVelocity: new Vector2(1, 1)
         .normalize()
         .rotateTo(this.config.angle)
-        .rotateBy(Util.modulate(Math.random(), 1, [-this.config.blastArc / 2, this.config.blastArc / 2]))
+        .rotateBy(
+          Util.modulate(Math.random(), 1, [-this.config.blastArc / 2, this.config.blastArc / 2]),
+        )
         .multiply(Util.modulate(Math.random(), 1, this.config.powerRange)),
 
       width: Util.modulate(Math.random(), 1, this.config.widthRange),
       height: Util.modulate(Math.random(), 1, this.config.heightRange),
       dragCoefficient: this.config.dragCoefficient,
 
-      simplexZoomMultiplier: Util.modulate(Math.random(), 1, this.config.simplexZoomMultiplierRange),
+      simplexZoomMultiplier: Util.modulate(
+        Math.random(),
+        1,
+        this.config.simplexZoomMultiplierRange,
+      ),
       simplexXOffset: Math.random() * this.config.simplexOffsetMultiplier,
       simplexYOffset: Math.random() * this.config.simplexOffsetMultiplier,
     };
   },
   // 9) Create canvas element and calculate offset. Takes in a callback (begin method).
-  createCanvas: function () {
+  createCanvas: function() {
     if (typeof this.canvasElement === 'undefined') {
       this.canvasElement = document.createElement('CANVAS');
 
@@ -124,48 +130,50 @@ ConfettiCannon.prototype = {
 
       if (Util.isHTMLElement(this.config.parentElement) === true) {
         if (this.config.parentElement.childElementCount > 0) {
-          this.config.parentElement.insertBefore(this.canvasElement, this.config.parentElement.childNodes[0]);
+          this.config.parentElement.insertBefore(
+            this.canvasElement,
+            this.config.parentElement.childNodes[0],
+          );
         } else {
           this.config.parentElement.appendChild(this.canvasElement);
         }
       }
 
       var result = this.config.updateFirePosition(this);
-      if (Vector2.isPoint(result) === true)
-        this.config.firePosition.equals(result);
+      if (Vector2.isPoint(result) === true) this.config.firePosition.equals(result);
     }
   },
-  setCanvasDimensionToWindow: function () {
+  setCanvasDimensionToWindow: function() {
     this.setCanvasDimension(window.innerWidth, window.innerHeight);
   },
-  setCanvasDimension: function (width, height) {
+  setCanvasDimension: function(width, height) {
     this.canvasElement.style.width = width + 'px';
     this.canvasElement.style.height = height + 'px';
     this.canvasElement.width = width * this.config.resolutionMultiplier;
     this.canvasElement.height = height * this.config.resolutionMultiplier;
   },
-  getElementCenterVectorRelativeToCanvas: function (element) {
+  getElementCenterVectorRelativeToCanvas: function(element) {
     var canvasRect = this.canvasElement.getBoundingClientRect();
     var elementRect = element.getBoundingClientRect();
-    var x = (elementRect.left - canvasRect.left) + (elementRect.width / 2);
-    var y = (elementRect.top - canvasRect.top) + (elementRect.height / 2);
+    var x = elementRect.left - canvasRect.left + elementRect.width / 2;
+    var y = elementRect.top - canvasRect.top + elementRect.height / 2;
     return new Vector2(x, y);
   },
   // 10) This is called once canvasElement is defined and is in the DOM. Start animation!
-  begin: function () {
+  begin: function() {
     if (this.isActive === true) {
       this.startAnimation();
       if (this.confetti.length === 0) this.end();
     }
   },
   // 11) Initialize animation object and start it.
-  startAnimation: function () {
+  startAnimation: function() {
     this.updateCount = 0;
     this.config.beforeFire(this);
     this.animation = new Animation({
       delay: this.config.delay,
       duration: 'forever',
-      onStart: function () {
+      onStart: function() {
         this.config.onFire(this);
       }.bind(this),
       onTick: this.update.bind(this),
@@ -173,7 +181,7 @@ ConfettiCannon.prototype = {
     this.animation.play();
   },
   // 12) Loop through each coins and draw them.
-  update: function () {
+  update: function() {
     this.clearCanvas();
 
     var deadConfetti = 0;
@@ -187,7 +195,10 @@ ConfettiCannon.prototype = {
         this.confetti[i].update();
         this.confetti[i].draw(this.context, this.config.resolutionMultiplier);
 
-        if (this.confetti[i].position.y + this.confetti[i].config.height > this.canvasElement.height)
+        if (
+          this.confetti[i].position.y + this.confetti[i].config.height >
+          this.canvasElement.height
+        )
           this.confetti[i].die();
       } else {
         deadConfetti++;
@@ -197,12 +208,12 @@ ConfettiCannon.prototype = {
     if (deadConfetti === this.confetti.length) this.end();
   },
   // 13) Helper function to clear canvas every frame.
-  clearCanvas: function () {
+  clearCanvas: function() {
     if (typeof this.canvasElement === 'object')
       this.context.clearRect(0, 0, this.canvasElement.width, this.canvasElement.height);
   },
   // 15) This is called after the last coin reached the end. Or if numberOfCoins is 0. Sayonara!
-  end: function () {
+  end: function() {
     this.clearCanvas();
     this.animation.stop();
     this.canvasElement.remove();
@@ -211,6 +222,6 @@ ConfettiCannon.prototype = {
     this.isActive = false;
     this.config.onComplete();
   },
-}
+};
 
 export default ConfettiCannon;

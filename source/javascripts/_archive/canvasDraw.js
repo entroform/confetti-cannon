@@ -1,18 +1,18 @@
-var CanvasDraw = function (context) {
+var CanvasDraw = function(context) {
   this.init(context);
-}
+};
 
 CanvasDraw.prototype = {
-  init: function (context) {
+  init: function(context) {
     this.context = context;
   },
-  moveTo: function (position) {
+  moveTo: function(position) {
     this.context.moveTo(position.x, position.y);
   },
-  lineTo: function (position) {
+  lineTo: function(position) {
     this.context.lineTo(position.x, position.y);
   },
-  circle: function (position, radius) {
+  circle: function(position, radius) {
     this.context.arc(position.x, position.y, radius, 0, Math.PI * 2);
   },
 };

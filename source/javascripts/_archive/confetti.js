@@ -52,25 +52,33 @@ Confetti.prototype = {
     this.life = this.config.life;
   },
   applyFriction: function(frictionCoefficient) {
-    var friction = typeof frictionCoefficient === 'number' ? frictionCoefficient : this.config.frictionCoefficient;
+    var friction =
+      typeof frictionCoefficient === 'number'
+        ? frictionCoefficient
+        : this.config.frictionCoefficient;
     if (friction !== 0) {
-      var force = this.velocity.clone().multiply(-1).normalize().multiply(friction);
+      var force = this.velocity
+        .clone()
+        .multiply(-1)
+        .normalize()
+        .multiply(friction);
       this.applyForce(force);
     }
   },
   applyDrag: function() {
     var speed = this.velocity.magnitude();
     var dragMagnitude = this.config.dragCoefficient * speed * speed;
-    var force = this.velocity.clone().multiply(-1).normalize().multiply(dragMagnitude);
+    var force = this.velocity
+      .clone()
+      .multiply(-1)
+      .normalize()
+      .multiply(dragMagnitude);
     this.applyForce(force);
   },
   applyLateralEntropy: function(t) {
     var zoom = this.config.simplexZoomMultiplier;
     if (zoom === 0) zoom = 1;
-    var x = this.simplex.noise(
-      this.config.simplexXOffset + (t / zoom),
-      this.config.simplexYOffset
-    );
+    var x = this.simplex.noise(this.config.simplexXOffset + t / zoom, this.config.simplexYOffset);
     var lateralOscillation = new Vector2(x, 0);
     this.applyForce(lateralOscillation);
   },
@@ -82,9 +90,7 @@ Confetti.prototype = {
   update: function() {
     this.life--;
     if (this.life <= 0) this.isAlive = false;
-    this.velocity
-      .add(this.acceleration)
-      .limit(this.config.maximumSpeed);
+    this.velocity.add(this.acceleration).limit(this.config.maximumSpeed);
     this.position.add(this.velocity);
     this.acceleration.multiply(0);
 
@@ -94,7 +100,6 @@ Confetti.prototype = {
     return this;
   },
   draw: function(context, m) {
-
     var x = this.position.x * m;
     var y = this.position.y * m;
 
@@ -110,10 +115,10 @@ Confetti.prototype = {
 
     context.beginPath();
 
-    context.moveTo(x - (w / 2), y - (h / 2));
-    context.lineTo(x + (w / 2), y - (h / 2));
-    context.lineTo(x + (w / 2), y + (h / 2));
-    context.lineTo(x - (w / 2), y + (h / 2));
+    context.moveTo(x - w / 2, y - h / 2);
+    context.lineTo(x + w / 2, y - h / 2);
+    context.lineTo(x + w / 2, y + h / 2);
+    context.lineTo(x - w / 2, y + h / 2);
 
     context.fillStyle = this.config.color;
     context.fill();
@@ -124,6 +129,6 @@ Confetti.prototype = {
     this.life = 0;
     this.isAlive = false;
   },
-}
+};
 
 export default Confetti;

@@ -1,12 +1,9 @@
 import Vector2 from './vector2';
 import ConfettiCannon from './confettiCannon';
 
-var getElementCenterVector = function (element) {
+var getElementCenterVector = function(element) {
   var rect = element.getBoundingClientRect();
-  return new Vector2(
-    rect.left + (rect.width / 2),
-    rect.top + (rect.height / 2),
-  );
+  return new Vector2(rect.left + rect.width / 2, rect.top + rect.height / 2);
 };
 
 var containerElement = document.querySelector('.container');
@@ -28,7 +25,7 @@ var confettiCannon = new ConfettiCannon({
   delay: 200,
   // angle: Math.PI,
   // angle: Math.PI + Math.PI / 4,
-  angle: 3 * Math.PI / 2,
+  angle: (3 * Math.PI) / 2,
   // angle: Math.PI * 2 - Math.PI / 4,
   // angle: 0,
   blastArc: Math.PI / 3,
@@ -46,26 +43,32 @@ var confettiCannon = new ConfettiCannon({
   simplexZoomMultiplierRange: [80, 120],
   simplexOffsetMultiplier: 100,
 
-  beforeFire: function () {
+  beforeFire: function() {
     triggerElement.classList.add('triggerButton--disabled');
     triggerElement.textContent = 'Steady...';
   },
-  onFire: function () {
+  onFire: function() {
     triggerElement.textContent = 'Reloading...';
   },
-  onComplete: function () {
+  onComplete: function() {
     triggerElement.classList.remove('triggerButton--disabled');
     triggerElement.textContent = 'Fire!';
   },
 });
 
-triggerElement.addEventListener('click', function () {
-  confettiCannon.fire();
-}.bind(this));
+triggerElement.addEventListener(
+  'click',
+  function() {
+    confettiCannon.fire();
+  }.bind(this),
+);
 
-window.addEventListener('resize', function () {
-  confettiCannon.config.firePosition.equals(getElementCenterVector(triggerElement));
-}.bind(this));
+window.addEventListener(
+  'resize',
+  function() {
+    confettiCannon.config.firePosition.equals(getElementCenterVector(triggerElement));
+  }.bind(this),
+);
 
 // @indicator
 
@@ -73,12 +76,9 @@ import ConfettiCannonIndicator from './confettiCannonIndicator';
 
 var confettiCannonIndicator = new ConfettiCannonIndicator({
   canvasElement: document.querySelector('canvas.confettiCannonIndicator'),
-  getCannonPosition: function () {
+  getCannonPosition: function() {
     const rect = triggerElement.getBoundingClientRect();
-    return new Vector2(
-      rect.left + rect.width / 2,
-      rect.top + rect.height / 2
-    );
+    return new Vector2(rect.left + rect.width / 2, rect.top + rect.height / 2);
   },
 });
 
@@ -96,15 +96,16 @@ var sc_angle = new SliderControl({
 
   range: [0, Math.PI * 2],
 
-  onInit: function (slider) {
-    slider.setValue(3 * Math.PI / 2);
+  onInit: function(slider) {
+    slider.setValue((3 * Math.PI) / 2);
   },
-  onUpdate: function (slider) {
+  onUpdate: function(slider) {
     var value = slider.getValue();
     confettiCannon.config.angle = value;
     confettiCannonIndicator.config.angle = value;
     confettiCannonIndicator.display();
-    slider.config.valueElement.textContent = ((Math.PI * 2 - value) / (Math.PI / 180)).toFixed(2) + String.fromCharCode(176);
+    slider.config.valueElement.textContent =
+      ((Math.PI * 2 - value) / (Math.PI / 180)).toFixed(2) + String.fromCharCode(176);
   },
 });
 
@@ -116,15 +117,16 @@ var sc_blastArc = new SliderControl({
 
   range: [0, Math.PI * 2],
 
-  onInit: function (slider) {
+  onInit: function(slider) {
     slider.setValue(Math.PI / 2);
   },
-  onUpdate: function (slider) {
+  onUpdate: function(slider) {
     var value = slider.getValue();
     confettiCannon.config.blastArc = value;
     confettiCannonIndicator.config.arc = value;
     confettiCannonIndicator.display();
-    slider.config.valueElement.textContent = (value / (Math.PI / 180)).toFixed(2) + String.fromCharCode(176);
+    slider.config.valueElement.textContent =
+      (value / (Math.PI / 180)).toFixed(2) + String.fromCharCode(176);
   },
 });
 
@@ -136,15 +138,15 @@ var sc_maxPower = new SliderControl({
 
   range: [10, 150],
 
-  onInit: function (slider) {
+  onInit: function(slider) {
     slider.setValue(50);
   },
-  onUpdate: function (slider) {
+  onUpdate: function(slider) {
     var value = slider.getValue();
     confettiCannon.config.powerRange = [10, value];
     confettiCannonIndicator.config.power = value;
     confettiCannonIndicator.display();
-    slider.config.valueElement.textContent = (value).toFixed(2);
+    slider.config.valueElement.textContent = value.toFixed(2);
   },
 });
 
@@ -156,16 +158,15 @@ var sc_numberOfConfetti = new SliderControl({
 
   range: [50, 10000],
 
-  onInit: function (slider) {
+  onInit: function(slider) {
     slider.setValue(500);
   },
-  onUpdate: function (slider) {
+  onUpdate: function(slider) {
     var value = slider.getValue();
     confettiCannon.config.numberOfConfetti = Math.floor(value);
     slider.config.valueElement.textContent = Math.floor(value);
   },
 });
-
 
 var sliderGravityControlElement = document.getElementById('sc_gravity');
 var sc_gravity = new SliderControl({
@@ -175,61 +176,67 @@ var sc_gravity = new SliderControl({
 
   range: [-2, 2],
 
-  onInit: function (slider) {
+  onInit: function(slider) {
     slider.setValue(1);
   },
-  onUpdate: function (slider) {
+  onUpdate: function(slider) {
     var value = slider.getValue();
     confettiCannon.config.gravity = value;
     slider.config.valueElement.textContent = value.toFixed(2);
   },
 });
 
-var updateSliders = function () {
+var updateSliders = function() {
   sc_angle.update();
   sc_blastArc.update();
   sc_gravity.update();
   sc_maxPower.update();
   sc_numberOfConfetti.update();
-}
+};
 
 // Controls
 
 var controlsIsOpen = false;
 var controlsElement = document.querySelector('.controls');
 var jsControlsOpenElement = document.querySelector('.js-controls-open');
-jsControlsOpenElement.addEventListener('click', function () {
-  if (controlsIsOpen === false) {
-    controlsIsOpen = true;
-    controlsElement.classList.remove('controls--animate-out');
-    jsControlsOpenElement.style.display = 'none';
-    controlsElement.classList.add('controls--active');
-    updateSliders();
-    controlsElement.classList.add('controls--animate-in');
-  }
-}.bind(this));
+jsControlsOpenElement.addEventListener(
+  'click',
+  function() {
+    if (controlsIsOpen === false) {
+      controlsIsOpen = true;
+      controlsElement.classList.remove('controls--animate-out');
+      jsControlsOpenElement.style.display = 'none';
+      controlsElement.classList.add('controls--active');
+      updateSliders();
+      controlsElement.classList.add('controls--animate-in');
+    }
+  }.bind(this),
+);
 
 var jsControlsCloseElement = document.querySelector('.js-controls-close');
 
-var closeControlsElement = function () {
+var closeControlsElement = function() {
   if (controlsIsOpen === true) {
     controlsElement.classList.remove('controls--animate-in');
     controlsElement.classList.add('controls--animate-out');
-    setTimeout(function () {
-      controlsElement.classList.remove('controls--active');
-      jsControlsOpenElement.style.display = 'block';
-      controlsIsOpen = false;
-    }.bind(this), 200);
+    setTimeout(
+      function() {
+        controlsElement.classList.remove('controls--active');
+        jsControlsOpenElement.style.display = 'block';
+        controlsIsOpen = false;
+      }.bind(this),
+      200,
+    );
   }
-}
+};
 
-jsControlsCloseElement.addEventListener('click', function () {
-  closeControlsElement();
-}.bind(this));
+jsControlsCloseElement.addEventListener(
+  'click',
+  function() {
+    closeControlsElement();
+  }.bind(this),
+);
 
-window.addEventListener('keyup', function (event) {
-  if (
-    controlsIsOpen === true &&
-    event.keyCode === 27
-  ) closeControlsElement();
+window.addEventListener('keyup', function(event) {
+  if (controlsIsOpen === true && event.keyCode === 27) closeControlsElement();
 });

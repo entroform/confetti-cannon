@@ -1,23 +1,25 @@
 import Util from './util';
 import Vector2 from './vector2';
 
- var POINTER_DRAG_EVENT_MANAGER_DEFAULT_CONFIG = {
+var POINTER_DRAG_EVENT_MANAGER_DEFAULT_CONFIG = {
   target: undefined,
   keepHistory: true,
 
-  condition: function () { return true; },
+  condition: function() {
+    return true;
+  },
 
-  onEvent: function () {},
+  onEvent: function() {},
 
-  onStart: function () {},
-  onDrag: function () {},
-  onEnd: function () {},
-  onCancel: function () {},
+  onStart: function() {},
+  onDrag: function() {},
+  onEnd: function() {},
+  onCancel: function() {},
 };
 
-var PointerDragEventManager = function (config) {
+var PointerDragEventManager = function(config) {
   this.init(config);
-}
+};
 
 PointerDragEventManager.prototype = {
   init(config) {
@@ -32,10 +34,10 @@ PointerDragEventManager.prototype = {
 
     this.listen();
   },
-  setConfig: function (config) {
+  setConfig: function(config) {
     if (typeof config === 'object') Util.objectAssign(this.config, config);
   },
-  createMousePointerDragEvent: function (type, event) {
+  createMousePointerDragEvent: function(type, event) {
     return {
       event: event,
       isTouch: false,
@@ -45,11 +47,8 @@ PointerDragEventManager.prototype = {
       type: type,
     };
   },
-  eventHandlerMouseDown: function (event) {
-    if (
-      this.isActive === false
-      && this.config.condition(event, this) === true
-    ) {
+  eventHandlerMouseDown: function(event) {
+    if (this.isActive === false && this.config.condition(event, this) === true) {
       console.log('he');
       this.isActive = true;
       this.isTouch = false;
@@ -62,7 +61,7 @@ PointerDragEventManager.prototype = {
       this.config.onStart(pointerEvent, this);
     }
   },
-  eventHandlerMouseMove: function (event) {
+  eventHandlerMouseMove: function(event) {
     if (this.isActive === true) {
       this.config.onEvent(event, this);
       var pointerEvent = this.createMousePointerDragEvent('drag', event);
@@ -70,7 +69,7 @@ PointerDragEventManager.prototype = {
       this.config.onDrag(pointerEvent, this);
     }
   },
-  eventHandlerMouseUp: function (event) {
+  eventHandlerMouseUp: function(event) {
     if (this.isActive === true) {
       this.config.onEvent(event, this);
       var pointerEvent = this.createMousePointerDragEvent('up', event);
@@ -79,7 +78,7 @@ PointerDragEventManager.prototype = {
       this.end();
     }
   },
-  eventHandlerMouseLeave: function (event) {
+  eventHandlerMouseLeave: function(event) {
     if (this.isActive === false) {
       this.config.onEvent(event, this);
       var pointerEvent = this.createMousePointerDragEvent('cancel', event);
@@ -88,7 +87,7 @@ PointerDragEventManager.prototype = {
       this.end();
     }
   },
-  createTouchPointerDragEvent: function (type, event, touch) {
+  createTouchPointerDragEvent: function(type, event, touch) {
     return {
       event: event,
       identifier: touch.identifier,
@@ -100,11 +99,8 @@ PointerDragEventManager.prototype = {
       type: type,
     };
   },
-  eventHandlerTouchStart: function (event) {
-    if (
-      this.isActive === false
-      && this.config.condition(event, this) === true
-    ) {
+  eventHandlerTouchStart: function(event) {
+    if (this.isActive === false && this.config.condition(event, this) === true) {
       this.isActive = true;
       this.isTouch = true;
       this.config.onEvent(event, this);
@@ -117,7 +113,7 @@ PointerDragEventManager.prototype = {
       this.config.onStart(pointerEvent, this);
     }
   },
-  eventHandlerTouchMove: function (event) {
+  eventHandlerTouchMove: function(event) {
     if (this.isActive === true) {
       this.config.onEvent(event, this);
       Array.from(event.changedTouches).forEach(touch => {
@@ -129,7 +125,7 @@ PointerDragEventManager.prototype = {
       });
     }
   },
-  eventHandlerTouchEnd: function (event) {
+  eventHandlerTouchEnd: function(event) {
     if (this.isActive === true) {
       this.config.onEvent(event, this);
       Array.from(event.changedTouches).forEach(touch => {
@@ -142,7 +138,7 @@ PointerDragEventManager.prototype = {
       this.end();
     }
   },
-  eventHandlerTouchCancel: function (event) {
+  eventHandlerTouchCancel: function(event) {
     if (this.isActive === true) {
       this.config.onEvent(event, this);
       Array.from(event.changedTouches).forEach(touch => {
@@ -155,11 +151,11 @@ PointerDragEventManager.prototype = {
       this.end();
     }
   },
-  end: function () {
+  end: function() {
     this.touchIdentifier = 0;
     this.isActive = false;
   },
-  listen: function () {
+  listen: function() {
     if (Util.isHTMLElement(this.config.target) === true) {
       // Listen Mouse Events
       this.config.target.addEventListener('mousedown', this.eventHandlerMouseDown.bind(this));
@@ -174,6 +170,6 @@ PointerDragEventManager.prototype = {
       window.addEventListener('touchcancel', this.eventHandlerTouchCancel.bind(this));
     }
   },
-}
+};
 
 export default PointerDragEventManager;

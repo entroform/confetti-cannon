@@ -1,11 +1,4 @@
-import {
-  Animation,
-  DOMUtil,
-  Num,
-  Point,
-  Util,
-  Vector2,
-} from '@nekobird/rocket';
+import { Animation, DOMUtil, Num, Point, Util, Vector2 } from '@nekobird/rocket';
 
 import Confetti from './confetti';
 
@@ -29,7 +22,7 @@ const CONFETTI_CANNON_DEFAULT_CONFIG = {
 
   numberOfConfetti: 500,
   delay: 0,
-  angle: 3 * Math.PI / 2,
+  angle: (3 * Math.PI) / 2,
   blastArc: Math.PI / 2,
   powerRange: [2, 40],
 
@@ -47,7 +40,6 @@ const CONFETTI_CANNON_DEFAULT_CONFIG = {
 };
 
 class ConfettiCannon {
-
   // 1) Initialize properties and stuff.
   constructor(config) {
     this.config = Object.assign({}, CONFETTI_CANNON_DEFAULT_CONFIG);
@@ -100,7 +92,9 @@ class ConfettiCannon {
       startVelocity: new Vector2(1, 1)
         .normalize()
         .rotateTo(this.config.angle)
-        .rotateBy(Num.modulate(Math.random(), 1, [-this.config.blastArc / 2, this.config.blastArc / 2]))
+        .rotateBy(
+          Num.modulate(Math.random(), 1, [-this.config.blastArc / 2, this.config.blastArc / 2]),
+        )
         .multiply(Num.modulate(Math.random(), 1, this.config.powerRange)),
 
       width: Num.modulate(Math.random(), 1, this.config.widthRange),
@@ -139,8 +133,7 @@ class ConfettiCannon {
       }
 
       const result = this.config.updateFirePosition(this);
-      if (Point.isPointLike(result) === true)
-        this.config.firePosition.equals(result);
+      if (Point.isPointLike(result) === true) this.config.firePosition.equals(result);
     }
   }
 
@@ -159,8 +152,8 @@ class ConfettiCannon {
   getElementCenterVectorRelativeToCanvas(element) {
     const canvasRect = this.canvasElement.getBoundingClientRect();
     const elementRect = element.getBoundingClientRect();
-    const x = (elementRect.left - canvasRect.left) + (elementRect.width / 2);
-    const y = (elementRect.top - canvasRect.top) + (elementRect.height / 2);
+    const x = elementRect.left - canvasRect.left + elementRect.width / 2;
+    const y = elementRect.top - canvasRect.top + elementRect.height / 2;
     return new Vector2(x, y);
   }
 
@@ -200,7 +193,10 @@ class ConfettiCannon {
         this.confetti[i].update();
         this.confetti[i].draw(this.context, this.config.resolutionMultiplier);
 
-        if (this.confetti[i].position.y + this.confetti[i].config.height > this.canvasElement.height)
+        if (
+          this.confetti[i].position.y + this.confetti[i].config.height >
+          this.canvasElement.height
+        )
           this.confetti[i].die();
       } else {
         deadConfetti++;

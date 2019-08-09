@@ -8,7 +8,7 @@
  * You can pass in a random number generator object if you like.
  * It is assumed to have a random() method.
  */
-var SimplexNoise = function (r) {
+var SimplexNoise = function(r) {
   if (r == undefined) r = Math;
   this.grad3 = [
     [1, 1, 0],
@@ -22,7 +22,7 @@ var SimplexNoise = function (r) {
     [0, 1, 1],
     [0, -1, 1],
     [0, 1, -1],
-    [0, -1, -1]
+    [0, -1, -1],
   ];
   this.p = [];
   for (var i = 0; i < 256; i++) {
@@ -100,15 +100,15 @@ var SimplexNoise = function (r) {
     [3, 1, 0, 2],
     [0, 0, 0, 0],
     [3, 2, 0, 1],
-    [3, 2, 1, 0]
+    [3, 2, 1, 0],
   ];
 };
 
-SimplexNoise.prototype.dot = function (g, x, y) {
+SimplexNoise.prototype.dot = function(g, x, y) {
   return g[0] * x + g[1] * y;
 };
 
-SimplexNoise.prototype.noise = function (xin, yin) {
+SimplexNoise.prototype.noise = function(xin, yin) {
   var n0, n1, n2; // Noise contributions from the three corners
   // Skew the input space to determine which simplex cell we're in
   var F2 = 0.5 * (Math.sqrt(3.0) - 1.0);

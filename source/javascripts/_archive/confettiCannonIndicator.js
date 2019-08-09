@@ -6,17 +6,17 @@ var CONFETTI_CANNON_INDICATOR_DEFAULT_CONFIG = {
   angle: 0,
   arc: Math.PI / 4,
   power: 10,
-  getCannonPosition: function () {
+  getCannonPosition: function() {
     return new Vector2();
   },
 };
 
-var ConfettiCannonIndicator = function (config) {
+var ConfettiCannonIndicator = function(config) {
   this.init(config);
-}
+};
 
 ConfettiCannonIndicator.prototype = {
-  init: function (config) {
+  init: function(config) {
     this.config = Util.objectAssign({}, CONFETTI_CANNON_INDICATOR_DEFAULT_CONFIG);
     this.setConfig(config);
 
@@ -24,26 +24,38 @@ ConfettiCannonIndicator.prototype = {
 
     this.listen();
   },
-  setConfig: function (config) {
+  setConfig: function(config) {
     if (typeof config === 'object') Util.objectAssign(this.config, config);
   },
-  updateCanvas: function () {
+  updateCanvas: function() {
     this.config.canvasElement.width = window.innerWidth;
     this.config.canvasElement.height = window.innerHeight;
   },
-  display: function () {
+  display: function() {
     this.updateCanvas();
     var position = this.config.getCannonPosition();
 
     var length = Util.hypotenuse(
       this.config.canvasElement.offsetWidth,
-      this.config.canvasElement.offsetHeight
+      this.config.canvasElement.offsetHeight,
     );
     length = length / 2;
 
-    var target = new Vector2(0, 1).rotateTo(this.config.angle).normalize().multiply(length).add(position);
-    var left = new Vector2(0, 1).rotateTo(this.config.angle - (this.config.arc / 2)).normalize().multiply(length).add(position);
-    var right = new Vector2(0, 1).rotateTo(this.config.angle + (this.config.arc / 2)).normalize().multiply(length).add(position);
+    var target = new Vector2(0, 1)
+      .rotateTo(this.config.angle)
+      .normalize()
+      .multiply(length)
+      .add(position);
+    var left = new Vector2(0, 1)
+      .rotateTo(this.config.angle - this.config.arc / 2)
+      .normalize()
+      .multiply(length)
+      .add(position);
+    var right = new Vector2(0, 1)
+      .rotateTo(this.config.angle + this.config.arc / 2)
+      .normalize()
+      .multiply(length)
+      .add(position);
 
     if (this.config.arc !== Math.PI * 2) {
       var gradient = this.context.createLinearGradient(position.x, position.y, target.x, target.y);
@@ -84,7 +96,7 @@ ConfettiCannonIndicator.prototype = {
         position.y,
         Util.modulate(this.config.power, [10, 150], [100, 500]),
         0,
-        Math.PI * 2
+        Math.PI * 2,
       );
     } else {
       this.context.arc(
@@ -92,17 +104,20 @@ ConfettiCannonIndicator.prototype = {
         position.y,
         Util.modulate(this.config.power, [10, 150], [100, 500]),
         Util.cycleNumber(this.config.angle - this.config.arc / 2, Math.PI * 2),
-        Util.cycleNumber(this.config.angle + this.config.arc / 2, Math.PI * 2)
+        Util.cycleNumber(this.config.angle + this.config.arc / 2, Math.PI * 2),
       );
     }
     this.context.strokeStyle = 'hsla(340, 100%, 50%, 0.5)';
     this.context.stroke();
   },
-  listen: function () {
-    window.addEventListener('resize', function () {
-      this.updateCanvas();
-      this.display();
-    }.bind(this));
+  listen: function() {
+    window.addEventListener(
+      'resize',
+      function() {
+        this.updateCanvas();
+        this.display();
+      }.bind(this),
+    );
   },
 };
 

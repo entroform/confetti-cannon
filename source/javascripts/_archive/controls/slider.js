@@ -9,21 +9,21 @@ var SLIDER_CONTROL_DEFAULT_CONFIG = {
   range: [0, 1],
   listenToKnobOnly: false,
 
-  onInit: function () {},
-  onActivate: function () {},
-  onDeactivate: function () {},
-  onUpdate: function () {},
-  moveKnob: function (knob, left) {
+  onInit: function() {},
+  onActivate: function() {},
+  onDeactivate: function() {},
+  onUpdate: function() {},
+  moveKnob: function(knob, left) {
     knob.style.transform = `translateX(${left}px)`;
   },
 };
 
-var SliderControl = function (config) {
+var SliderControl = function(config) {
   this.init(config);
-}
+};
 
 SliderControl.prototype = {
-  init: function (config) {
+  init: function(config) {
     this.config = Util.objectAssign({}, SLIDER_CONTROL_DEFAULT_CONFIG);
     this.setConfig(config);
 
@@ -40,10 +40,10 @@ SliderControl.prototype = {
     this.pointerDragEventManager = new PointerDragEventManager();
     this.listen();
   },
-  setConfig: function (config) {
+  setConfig: function(config) {
     if (typeof config === 'object') Object.assign(this.config, config);
   },
-  setValue: function (value) {
+  setValue: function(value) {
     var knobElement = this.config.knobElement;
     var trackElement = this.config.trackElement;
 
@@ -55,10 +55,10 @@ SliderControl.prototype = {
     this._value = Util.modulate(value, this.config.range, 1);
     this.config.onUpdate(this);
   },
-  getValue: function () {
+  getValue: function() {
     return Util.modulate(this._value, 1, this.config.range);
   },
-  update: function () {
+  update: function() {
     var knobElement = this.config.knobElement;
     var trackElement = this.config.trackElement;
 
@@ -69,7 +69,7 @@ SliderControl.prototype = {
     this.config.moveKnob(knobElement, left);
     this.config.onUpdate(this);
   },
-  eventHandlerStart: function (pointerEvent) {
+  eventHandlerStart: function(pointerEvent) {
     if (
       this.isActive === false &&
       Util.isHTMLElement(this.config.knobElement) === true &&
@@ -104,7 +104,7 @@ SliderControl.prototype = {
           pointerEvent.position.x - trackRect.left >= 0 &&
           pointerEvent.position.x - trackRect.left <= trackRect.width
         ) {
-          var left = pointerEvent.position.x - trackRect.left - (knobRect.width / 2);
+          var left = pointerEvent.position.x - trackRect.left - knobRect.width / 2;
           this._value = Util.modulate(left, [0, trackRect.width - knobRect.width], 1, true);
           this.config.moveKnob(knobElement, left);
           this.config.onUpdate(this);
@@ -113,10 +113,8 @@ SliderControl.prototype = {
 
       if (
         this.config.listenToKnobOnly === false ||
-        (
-          this.config.listenToKnobOnly === true &&
-          Util.hasAncestor(pointerEvent.target, knobElement) === true
-        )
+        (this.config.listenToKnobOnly === true &&
+          Util.hasAncestor(pointerEvent.target, knobElement) === true)
       ) {
         this.isActive = true;
         const knobRect = knobElement.getBoundingClientRect();
@@ -125,7 +123,7 @@ SliderControl.prototype = {
       }
     }
   },
-  eventHandlerDrag: function (pointerEvent) {
+  eventHandlerDrag: function(pointerEvent) {
     if (this.isActive === true) {
       const knobElement = this.config.knobElement;
       const trackElement = this.config.trackElement;
@@ -139,16 +137,16 @@ SliderControl.prototype = {
       this.config.onUpdate(this);
     }
   },
-  eventHandlerEnd: function () {
+  eventHandlerEnd: function() {
     if (this.isActive === true) {
       this.config.onDeactivate(this);
       this.isActive = false;
     }
   },
-  listen: function () {
+  listen: function() {
     if (Util.isHTMLElement(this.config.trackElement) === true) {
       this.pointerDragEventManager = new PointerDragEventManager({
-        onEvent: function (event) {
+        onEvent: function(event) {
           event.preventDefault();
         },
         keepHistory: false,
@@ -160,6 +158,6 @@ SliderControl.prototype = {
       });
     }
   },
-}
+};
 
 export default SliderControl;
