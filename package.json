@@ -11,7 +11,7 @@
   "author": "Andrew Prasetya",
   "main": "source/main.js",
   "scripts": {
-    "build": "rm -r ./docs; parcel build ./source/index.html --out-dir docs --public-url ./",
+    "build": "rm -r ./docs; parcel build ./source/index.html --out-dir build --public-url ./",
     "prettier": "prettier --write 'source/**/*.js'",
     "start": "parcel ./source/index.html",
     "test": "echo \"Error: no test specified\" && exit 1"
