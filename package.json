@@ -18,7 +18,7 @@
   },
   "browserslist": "> 1%, not dead",
   "dependencies": {
-    "@nekobird/controls": "0.0.4",
+    "@nekobird/controls": "0.0.5",
     "@nekobird/rocket": "0.0.118"
   },
   "devDependencies": {

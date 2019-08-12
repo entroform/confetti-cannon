@@ -148,12 +148,14 @@ const sc_maxPower = new DuoKnobSlider({
   knobOneElement: duoSlider_powerRange.querySelector('.duoKnobSlider__knobOne'),
   knobTwoElement: duoSlider_powerRange.querySelector('.duoKnobSlider__knobTwo'),
 
-  valueOneElement: duoSlider_powerRange.querySelector('.duoKnobSlider__valueOne'),
-  valueTwoElement: duoSlider_powerRange.querySelector('.duoKnobSlider__valueTwo'),
+  minValueElement: duoSlider_powerRange.querySelector('.duoKnobSlider__valueOne'),
+  maxValueElement: duoSlider_powerRange.querySelector('.duoKnobSlider__valueTwo'),
 
   range: [10, 150],
 
-  onInit: slider => slider.value = [10, 50],
+  onInit: slider => {
+    slider.value = [10, 50];
+  },
 
   onUpdate: slider => {
     const { value } = slider;
@@ -164,7 +166,8 @@ const sc_maxPower = new DuoKnobSlider({
     confettiCannonIndicator.config.power = value[1];
     confettiCannonIndicator.display();
    
-    slider.config.valueElement.textContent = value.toFixed(2);
+    slider.config.minValueElement.textContent = value[0].toFixed(2);
+    slider.config.maxValueElement.textContent = value[1].toFixed(2);
   },
 });
 
