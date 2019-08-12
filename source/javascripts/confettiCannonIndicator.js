@@ -1,4 +1,7 @@
-import { Num, Vector2 } from '@nekobird/rocket';
+import {
+  Num,
+  Vector2,
+} from '@nekobird/rocket';
 
 const CONFETTI_CANNON_INDICATOR_DEFAULT_CONFIG = {
   canvasElement: undefined,
@@ -19,11 +22,14 @@ class ConfettiCannonIndicator {
   }
 
   setConfig(config) {
-    if (typeof config === 'object') Object.assign(this.config, config);
+    if (typeof config === 'object') {
+      Object.assign(this.config, config);
+    }
   }
 
   updateCanvas() {
     const { canvasElement } = this.config;
+
     canvasElement.width = window.innerWidth;
     canvasElement.height = window.innerHeight;
   }
@@ -47,11 +53,13 @@ class ConfettiCannonIndicator {
       .normalize()
       .multiply(length)
       .add(position);
+
     const left = new Vector2(0, 1)
       .rotateTo(angle - arc / 2)
       .normalize()
       .multiply(length)
       .add(position);
+
     const right = new Vector2(0, 1)
       .rotateTo(angle + arc / 2)
       .normalize()
@@ -65,6 +73,7 @@ class ConfettiCannonIndicator {
         target.x,
         target.y,
       );
+
       gradient.addColorStop(0, 'hsla(340, 100%, 50%, 0)');
       gradient.addColorStop(1, 'hsla(340, 100%, 50%, 1)');
       this.context.save();
@@ -111,7 +120,9 @@ class ConfettiCannonIndicator {
         Num.cycle(angle + arc / 2, Math.PI * 2),
       );
     }
+
     this.context.strokeStyle = 'hsla(340, 100%, 50%, 0.5)';
+
     this.context.stroke();
   }
 

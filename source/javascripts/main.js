@@ -1,27 +1,40 @@
-import { Vector2 } from '@nekobird/rocket';
-import { MonoKnobSlider } from '@nekobird/controls';
+import {
+  Vector2,
+} from '@nekobird/rocket';
+
+import {
+  MonoKnobSlider,
+  DuoKnobSlider,
+} from '@nekobird/controls';
 
 import ConfettiCannon from './confettiCannon';
 
 const getElementCenterVector = element => {
   const { left, top, width, height } = element.getBoundingClientRect();
+
   return new Vector2(left + width / 2, top + height / 2);
 };
 
 const containerElement = document.querySelector('.container');
+
 const triggerElement = document.querySelector('.triggerButton');
 
 const confettiCannon = new ConfettiCannon({
   parentElement: containerElement,
+
   resolutionMultiplier: 2,
 
   colorChoices: ['#80EAFF', '#FF0055', '#00FFAA', '#FFFF00'],
+
   widthRange: [2, 10],
+
   heightRange: [2, 10],
+
   lifeSpanRange: [100, 250],
 
   // Cannon Settings
   firePosition: getElementCenterVector(triggerElement),
+
   numberOfConfetti: 500,
 
   delay: 200,
@@ -30,6 +43,7 @@ const confettiCannon = new ConfettiCannon({
   angle: (3 * Math.PI) / 2,
   // angle: Math.PI * 2 - Math.PI / 4,
   // angle: 0,
+
   blastArc: Math.PI / 3,
 
   // Power Ranger
@@ -43,15 +57,18 @@ const confettiCannon = new ConfettiCannon({
 
   // Simplex lateral entropy settings.
   simplexZoomMultiplierRange: [80, 120],
+
   simplexOffsetMultiplier: 100,
 
   beforeFire: () => {
     triggerElement.classList.add('triggerButton--disabled');
     triggerElement.textContent = 'Steady...';
   },
+
   onFire: () => {
     triggerElement.textContent = 'Reloading...';
   },
+
   onComplete: () => {
     triggerElement.classList.remove('triggerButton--disabled');
     triggerElement.textContent = 'Fire!';
@@ -61,7 +78,9 @@ const confettiCannon = new ConfettiCannon({
 triggerElement.addEventListener('click', () => confettiCannon.fire());
 
 window.addEventListener('resize', () => {
-  confettiCannon.config.firePosition.equals(getElementCenterVector(triggerElement));
+  const { firePosition } = confettiCannon.config;
+
+  firePosition.equals(getElementCenterVector(triggerElement));
 });
 
 // @indicator
@@ -70,8 +89,10 @@ import ConfettiCannonIndicator from './confettiCannonIndicator';
 
 const confettiCannonIndicator = new ConfettiCannonIndicator({
   canvasElement: document.querySelector('canvas.confettiCannonIndicator'),
+
   getCannonPosition: () => {
     const { left, top, width, height } = triggerElement.getBoundingClientRect();
+
     return new Vector2(left + width / 2, top + height / 2);
   },
 });
@@ -80,13 +101,16 @@ confettiCannonIndicator.display();
 
 // @controls
 
-const sliderControlElementAngle = document.getElementById('sc_angle');
+const monoKnobSliderElementAngle = document.getElementById('sc_angle');
 const sc_angle = new MonoKnobSlider({
-  trackElement: sliderControlElementAngle.querySelector('.sliderControl__track'),
-  knobElement: sliderControlElementAngle.querySelector('.sliderControl__knob'),
-  valueElement: sliderControlElementAngle.querySelector('.sliderControl__value'),
+  trackElement: monoKnobSliderElementAngle.querySelector('.monoKnobSlider__track'),
+  knobElement: monoKnobSliderElementAngle.querySelector('.monoKnobSlider__knob'),
+  valueElement: monoKnobSliderElementAngle.querySelector('.monoKnobSlider__value'),
+
   range: [0, Math.PI * 2],
-  onInit: slider => (slider.value = (3 * Math.PI) / 2),
+
+  onInit: slider => slider.value = (3 * Math.PI) / 2,
+
   onUpdate: slider => {
     const { value } = slider;
     confettiCannon.config.angle = value;
@@ -99,11 +123,14 @@ const sc_angle = new MonoKnobSlider({
 
 const sliderBlastArcControlElement = document.getElementById('sc_blastArc');
 const sc_blastArc = new MonoKnobSlider({
-  trackElement: sliderBlastArcControlElement.querySelector('.sliderControl__track'),
-  knobElement: sliderBlastArcControlElement.querySelector('.sliderControl__knob'),
-  valueElement: sliderBlastArcControlElement.querySelector('.sliderControl__value'),
+  trackElement: sliderBlastArcControlElement.querySelector('.monoKnobSlider__track'),
+  knobElement: sliderBlastArcControlElement.querySelector('.monoKnobSlider__knob'),
+  valueElement: sliderBlastArcControlElement.querySelector('.monoKnobSlider__value'),
+
   range: [0, Math.PI * 2],
-  onInit: slider => (slider.value = Math.PI / 2),
+
+  onInit: slider => slider.value = Math.PI / 2,
+
   onUpdate: slider => {
     const { value } = slider;
     confettiCannon.config.blastArc = value;
@@ -114,27 +141,38 @@ const sc_blastArc = new MonoKnobSlider({
   },
 });
 
-const sliderMaxPowerControlElement = document.getElementById('sc_maxPower');
-const sc_maxPower = new MonoKnobSlider({
-  trackElement: sliderMaxPowerControlElement.querySelector('.sliderControl__track'),
-  knobElement: sliderMaxPowerControlElement.querySelector('.sliderControl__knob'),
-  valueElement: sliderMaxPowerControlElement.querySelector('.sliderControl__value'),
+const duoSlider_powerRange = document.getElementById('sc_powerRange');
+const sc_maxPower = new DuoKnobSlider({
+  trackElement: duoSlider_powerRange.querySelector('.duoKnobSlider__track'),
+
+  knobOneElement: duoSlider_powerRange.querySelector('.duoKnobSlider__knobOne'),
+  knobTwoElement: duoSlider_powerRange.querySelector('.duoKnobSlider__knobTwo'),
+
+  valueOneElement: duoSlider_powerRange.querySelector('.duoKnobSlider__valueOne'),
+  valueTwoElement: duoSlider_powerRange.querySelector('.duoKnobSlider__valueTwo'),
+
   range: [10, 150],
-  onInit: slider => (slider.value = 50),
+
+  onInit: slider => slider.value = [10, 50],
+
   onUpdate: slider => {
     const { value } = slider;
-    confettiCannon.config.powerRange = [10, value];
-    confettiCannonIndicator.config.power = value;
+    
+    confettiCannon.config.powerRange = value;
+    console.log(value);
+
+    confettiCannonIndicator.config.power = value[1];
     confettiCannonIndicator.display();
+   
     slider.config.valueElement.textContent = value.toFixed(2);
   },
 });
 
 const sliderNumberOfConfettiControlElement = document.getElementById('sc_numberOfConfetti');
 const sc_numberOfConfetti = new MonoKnobSlider({
-  trackElement: sliderNumberOfConfettiControlElement.querySelector('.sliderControl__track'),
-  knobElement: sliderNumberOfConfettiControlElement.querySelector('.sliderControl__knob'),
-  valueElement: sliderNumberOfConfettiControlElement.querySelector('.sliderControl__value'),
+  trackElement: sliderNumberOfConfettiControlElement.querySelector('.monoKnobSlider__track'),
+  knobElement: sliderNumberOfConfettiControlElement.querySelector('.monoKnobSlider__knob'),
+  valueElement: sliderNumberOfConfettiControlElement.querySelector('.monoKnobSlider__value'),
   range: [50, 10000],
   onInit: slider => (slider.value = 500),
   onUpdate: slider => {
@@ -146,9 +184,9 @@ const sc_numberOfConfetti = new MonoKnobSlider({
 
 const sliderGravityControlElement = document.getElementById('sc_gravity');
 const sc_gravity = new MonoKnobSlider({
-  trackElement: sliderGravityControlElement.querySelector('.sliderControl__track'),
-  knobElement: sliderGravityControlElement.querySelector('.sliderControl__knob'),
-  valueElement: sliderGravityControlElement.querySelector('.sliderControl__value'),
+  trackElement: sliderGravityControlElement.querySelector('.monoKnobSlider__track'),
+  knobElement: sliderGravityControlElement.querySelector('.monoKnobSlider__knob'),
+  valueElement: sliderGravityControlElement.querySelector('.monoKnobSlider__value'),
   range: [-2, 2],
   onInit: slider => (slider.value = 1),
   onUpdate: slider => {
@@ -162,7 +200,6 @@ const updateSliders = () => {
   sc_angle.update();
   sc_blastArc.update();
   sc_gravity.update();
-  sc_maxPower.update();
   sc_numberOfConfetti.update();
 };
 

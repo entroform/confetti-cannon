@@ -1,21 +1,25 @@
-.sliderControl {
+.monoKnobSlider,
+.duoKnobSlider {
   width: 100%;
 
   &:hover {
-    .sliderControl__track {
+    .monoKnobSlider__track,
+    .duoKnobSlider__track {
       background-color: hsl(240, 10%, 10%);
     }
   }
 }
 
-.sliderControl__label {
+.monoKnobSlider__label,
+.duoKnobSlider__label {
   color: hsl(340, 0%, 90%);
   font-size: 12px;
   font-weight: bold;
   line-height: 2;
 }
 
-.sliderControl__track {
+.monoKnobSlider__track,
+.duoKnobSlider__track {
   background-color: hsl(240, 10%, 5%);
   border-radius: 4px;
   cursor: pointer;
@@ -28,7 +32,9 @@
   transition-property: background-color;
 }
 
-.sliderControl__knob {
+.monoKnobSlider__knob,
+.duoKnobSlider__knobOne,
+.duoKnobSlider__knobTwo {
   background-color: $color_primary;
   border-radius: 4px;
   cursor: pointer;
@@ -49,7 +55,9 @@
   }
 }
 
-.sliderControl__value {
+.monoKnobSlider__value,
+.duoKnobSlider__valueOne,
+.duoKnobSlider__valueTwo {
   color: hsl(240, 10%, 60%);
   font-size: 12px;
   font-weight: bold;

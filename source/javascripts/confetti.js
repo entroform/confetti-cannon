@@ -1,8 +1,10 @@
-import { Num, Vector2 } from '@nekobird/rocket';
+import {
+  Num,
+  Vector2,
+} from '@nekobird/rocket';
 
 import SimplexNoise from './noise';
 
-// @Confetti
 const CONFETTI_DEFAULT_CONFIG = {
   color: 'white',
   height: 20,
@@ -38,59 +40,85 @@ class Confetti {
   }
 
   setConfig(config) {
-    if (typeof config === 'object') Object.assign(this.config, config);
+    if (typeof config === 'object') {
+      Object.assign(this.config, config);
+    }
+
     this.life = this.config.life;
   }
 
   applyFriction(frictionCoefficient) {
-    const friction =
-      typeof frictionCoefficient === 'number'
-        ? frictionCoefficient
-        : this.config.frictionCoefficient;
+    let friction = this.config.frictionCoefficient;
+
+    if (typeof frictionCoefficient === 'number') {
+      friction = frictionCoefficient;
+    }
+
     if (friction !== 0) {
-      const force = this.velocity.clone
+      const force = this.velocity
+        .clone
         .multiply(-1)
         .normalize()
         .multiply(friction);
+
       this.applyForce(force);
     }
   }
 
   applyDrag() {
     const speed = this.velocity.magnitude;
+
     const dragMagnitude = this.config.dragCoefficient * speed * speed;
-    const force = this.velocity.clone
+
+    const force = this.velocity
+      .clone
       .multiply(-1)
       .normalize()
       .multiply(dragMagnitude);
+
     this.applyForce(force);
   }
 
   applyLateralEntropy(t) {
     const zoom = this.config.simplexZoomMultiplier;
-    if (zoom === 0) zoom = 1;
-    const x = this.simplex.noise(this.config.simplexXOffset + t / zoom, this.config.simplexYOffset);
+
+    if (zoom === 0) {
+      zoom = 1;
+    }
+
+    const x = this.simplex.noise(
+      this.config.simplexXOffset + t / zoom,
+      this.config.simplexYOffset
+    );
+
     const lateralOscillation = new Vector2(x, 0);
+
     this.applyForce(lateralOscillation);
   }
 
   applyForce(force) {
     force.divide(this.config.mass);
+
     this.acceleration.add(force);
-    return this;
   }
 
   update() {
     this.life--;
-    if (this.life <= 0) this.isAlive = false;
-    this.velocity.add(this.acceleration).limit(this.config.maximumSpeed);
+
+    if (this.life <= 0) {
+      this.die();
+    }
+
+    this.velocity
+      .add(this.acceleration)
+      .limit(this.config.maximumSpeed);
     this.position.add(this.velocity);
     this.acceleration.multiply(0);
 
     this.angleVelocity += this.angleAcceleration;
     this.angleVelocity = Num.constrain(this.angleVelocity, [-0.1, 0.1]);
+
     this.angle += this.angleVelocity;
-    return this;
   }
 
   draw(context, m) {

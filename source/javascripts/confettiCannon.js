@@ -1,4 +1,11 @@
-import { Animation, DOMUtil, Num, Point, Util, Vector2 } from '@nekobird/rocket';
+import {
+  Animation,
+  DOMUtil,
+  Num,
+  Point,
+  Util,
+  Vector2,
+} from '@nekobird/rocket';
 
 import Confetti from './confetti';
 
@@ -52,10 +59,21 @@ class ConfettiCannon {
   }
 
   setConfig(config) {
-    if (typeof config === 'object') Object.assign(this.config, config);
-    if (this.config.numberOfConfetti < 0) this.config.numberOfConfetti = 0;
-    if (this.config.resolutionMultiplier < 1) this.config.resolutionMultiplier = 1;
-    if (this.config.delay < 0) this.config.delay = 0;
+    if (typeof config === 'object') {
+      Object.assign(this.config, config);
+    }
+
+    if (this.config.numberOfConfetti < 0) {
+      this.config.numberOfConfetti = 0;
+    }
+
+    if (this.config.resolutionMultiplier < 1) {
+      this.config.resolutionMultiplier = 1;
+    }
+
+    if (this.config.delay < 0) {
+      this.config.delay = 0;
+    }
   }
 
   fire() {
@@ -73,8 +91,10 @@ class ConfettiCannon {
 
   populate() {
     this.confetti = [];
+
     for (let i = 0; i < this.config.numberOfConfetti; i++) {
       const config = this.generateConfettiConfig();
+
       this.confetti.push(new Confetti(config));
     }
   }
@@ -115,11 +135,13 @@ class ConfettiCannon {
       this.canvasElement.style.top = '0px';
 
       this.setCanvasDimensionToWindow();
+
       this.config.prepareCanvas(this.canvasElement, this);
 
       this.context = this.canvasElement.getContext('2d');
 
       const { parentElement } = this.config;
+
       if (DOMUtil.isHTMLElement(parentElement) === true) {
         if (parentElement.childElementCount > 0) {
           parentElement.insertBefore(this.canvasElement, parentElement.childNodes[0]);
@@ -129,7 +151,10 @@ class ConfettiCannon {
       }
 
       const result = this.config.updateFirePosition(this);
-      if (Point.isPointLike(result) === true) this.config.firePosition.equals(result);
+
+      if (Point.isPointLike(result) === true) {
+        this.config.firePosition.equals(result);
+      }
     }
   }
 
@@ -139,30 +164,40 @@ class ConfettiCannon {
 
   setCanvasDimension(width, height) {
     const { resolutionMultiplier } = this.config;
+
     this.canvasElement.style.width = `${width}px`;
     this.canvasElement.style.height = `${height}px`;
+
     this.canvasElement.width = width * resolutionMultiplier;
     this.canvasElement.height = height * resolutionMultiplier;
   }
 
   getElementCenterVectorRelativeToCanvas(element) {
     const canvasRect = this.canvasElement.getBoundingClientRect();
+
     const elementRect = element.getBoundingClientRect();
+
     const x = elementRect.left - canvasRect.left + elementRect.width / 2;
     const y = elementRect.top - canvasRect.top + elementRect.height / 2;
+
     return new Vector2(x, y);
   }
 
   begin() {
     if (this.isActive === true) {
       this.startAnimation();
-      if (this.confetti.length === 0) this.end();
+
+      if (this.confetti.length === 0) {
+        this.end();
+      }
     }
   }
 
   startAnimation() {
     this.updateCount = 0;
+
     this.config.beforeFire(this);
+
     this.animation = new Animation({
       timeUnit: 'ms',
       delay: this.config.delay,
@@ -171,6 +206,7 @@ class ConfettiCannon {
       onStart: () => this.config.onFire(this),
       onTick: t => this.update(),
     });
+
     this.animation.play();
   }
 
@@ -180,9 +216,12 @@ class ConfettiCannon {
     const { gravity, frictionCoefficient, resolutionMultiplier } = this.config;
 
     let deadConfetti = 0;
+
     const gravityVector = new Vector2(0, gravity);
+
     for (let i = 0; i < this.confetti.length; i++) {
       const confetti = this.confetti[i];
+
       if (confetti.isAlive === true) {
         confetti.applyFriction(frictionCoefficient);
         confetti.applyDrag();
@@ -190,18 +229,20 @@ class ConfettiCannon {
         confetti.applyLateralEntropy(this.updateCount);
         confetti.update();
         confetti.draw(this.context, resolutionMultiplier);
-        if (
-          confetti.position.y + confetti.config.height >
-          this.canvasElement.height
-        ) {
+
+        if (confetti.position.y + confetti.config.height > this.canvasElement.height) {
           confetti.die();
         }
       } else {
         deadConfetti++;
       }
     }
+
     this.updateCount++;
-    if (deadConfetti >= this.confetti.length) this.end();
+
+    if (deadConfetti >= this.confetti.length) {
+      this.end();
+    }
   }
 
   clearCanvas() {
@@ -212,11 +253,16 @@ class ConfettiCannon {
 
   end() {
     this.animation.stop();
+
     this.clearCanvas();
+
     this.canvasElement.remove();
     this.canvasElement = undefined;
+
     this.confetti = [];
+
     this.isActive = false;
+
     this.config.onComplete();
   }
 }
