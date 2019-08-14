@@ -68,7 +68,9 @@ class Confetti {
   applyDrag() {
     const speed = this.velocity.magnitude;
 
-    const dragMagnitude = this.config.dragCoefficient * speed * speed;
+    const { dragCoefficient } = this.config;
+
+    const dragMagnitude = dragCoefficient * speed * speed;
 
     const force = this.velocity
       .clone

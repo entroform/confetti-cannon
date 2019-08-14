@@ -78,13 +78,16 @@ class ConfettiCannon {
 
   fire() {
     this.setup();
+
     this.begin();
   }
 
   setup(callback) {
     if (this.isActive === false) {
       this.isActive = true;
+
       this.createCanvas(callback);
+
       this.populate();
     }
   }
@@ -101,25 +104,45 @@ class ConfettiCannon {
 
   // 8) This factory function generates config for each coin object.
   generateConfettiConfig() {
+    const {
+      colorChoices,
+      lifeSpanRange,
+      firePosition,
+      angle,
+      blastArc,
+      powerRange,
+      widthRange,
+      heightRange,
+      dragCoefficient,
+      simplexZoomMultiplierRange,
+      simplexOffsetMultiplier,
+    } = this.config;
+
     return {
-      color: Util.randomChoice(this.config.colorChoices),
-      life: Num.modulate(Math.random(), 1, this.config.lifeSpanRange),
-      startPosition: new Vector2().equals(this.config.firePosition),
-      startVelocity: new Vector2(1, 1)
-        .normalize()
-        .rotateTo(this.config.angle)
+      color: Util.randomChoice(colorChoices),
+
+      life: Num.modulate(Math.random(), 1, lifeSpanRange),
+
+      startPosition: new Vector2().equals(firePosition),
+
+      startVelocity: new Vector2(0, 1)
+        .rotateTo(angle)
         .rotateBy(
-          Num.modulate(Math.random(), 1, [-this.config.blastArc / 2, this.config.blastArc / 2]),
+          Num.modulate(Math.random(), 1, [-blastArc / 2, blastArc / 2]),
         )
-        .multiply(Num.modulate(Math.random(), 1, this.config.powerRange)),
+        .multiply(Num.modulate(Math.random(), 1, powerRange)),
 
-      width: Num.modulate(Math.random(), 1, this.config.widthRange),
-      height: Num.modulate(Math.random(), 1, this.config.heightRange),
-      dragCoefficient: this.config.dragCoefficient,
+      width: Num.modulate(Math.random(), 1, widthRange),
 
-      simplexZoomMultiplier: Num.modulate(Math.random(), 1, this.config.simplexZoomMultiplierRange),
-      simplexXOffset: Math.random() * this.config.simplexOffsetMultiplier,
-      simplexYOffset: Math.random() * this.config.simplexOffsetMultiplier,
+      height: Num.modulate(Math.random(), 1, heightRange),
+
+      dragCoefficient: dragCoefficient,
+
+      simplexZoomMultiplier: Num.modulate(Math.random(), 1, simplexZoomMultiplierRange),
+
+      simplexXOffset: Math.random() * simplexOffsetMultiplier,
+
+      simplexYOffset: Math.random() * simplexOffsetMultiplier,
     };
   }
 
@@ -247,7 +270,11 @@ class ConfettiCannon {
 
   clearCanvas() {
     if (typeof this.canvasElement === 'object') {
-      this.context.clearRect(0, 0, this.canvasElement.width, this.canvasElement.height);
+      this.context.clearRect(
+        0, 0,
+        this.canvasElement.width,
+        this.canvasElement.height
+      );
     }
   }
 
