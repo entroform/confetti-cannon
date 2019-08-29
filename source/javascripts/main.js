@@ -3,8 +3,8 @@ import {
 } from '@nekobird/rocket';
 
 import {
-  MonoKnobSlider,
   DuoKnobSlider,
+  MonoKnobSlider,
 } from '@nekobird/controls';
 
 import ConfettiCannon from './confettiCannon';
@@ -12,7 +12,10 @@ import ConfettiCannon from './confettiCannon';
 const getElementCenterVector = element => {
   const { left, top, width, height } = element.getBoundingClientRect();
 
-  return new Vector2(left + width / 2, top + height / 2);
+  return new Vector2(
+    left + width / 2,
+    top + height / 2,
+  );
 };
 
 const containerElement = document.querySelector('.container');

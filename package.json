@@ -16,10 +16,9 @@
     "start": "parcel ./source/index.html",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "browserslist": "> 1%, not dead",
   "dependencies": {
     "@nekobird/controls": "0.0.5",
-    "@nekobird/rocket": "0.0.118"
+    "@nekobird/rocket": "0.0.122"
   },
   "devDependencies": {
     "@babel/core": "^7.5.5",

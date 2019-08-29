@@ -4,6 +4,7 @@ import {
   Num,
   Point,
   Util,
+  Ticker,
   Vector2,
 } from '@nekobird/rocket';
 
@@ -121,24 +122,24 @@ class ConfettiCannon {
     return {
       color: Util.randomChoice(colorChoices),
 
-      life: Num.modulate(Math.random(), 1, lifeSpanRange),
+      life: Num.transform(Math.random(), 1, lifeSpanRange),
 
       startPosition: new Vector2().equals(firePosition),
 
       startVelocity: new Vector2(0, 1)
         .rotateTo(angle)
         .rotateBy(
-          Num.modulate(Math.random(), 1, [-blastArc / 2, blastArc / 2]),
+          Num.transform(Math.random(), 1, [-blastArc / 2, blastArc / 2]),
         )
-        .multiply(Num.modulate(Math.random(), 1, powerRange)),
+        .multiply(Num.transform(Math.random(), 1, powerRange)),
 
-      width: Num.modulate(Math.random(), 1, widthRange),
+      width: Num.transform(Math.random(), 1, widthRange),
 
-      height: Num.modulate(Math.random(), 1, heightRange),
+      height: Num.transform(Math.random(), 1, heightRange),
 
       dragCoefficient: dragCoefficient,
 
-      simplexZoomMultiplier: Num.modulate(Math.random(), 1, simplexZoomMultiplierRange),
+      simplexZoomMultiplier: Num.transform(Math.random(), 1, simplexZoomMultiplierRange),
 
       simplexXOffset: Math.random() * simplexOffsetMultiplier,
 

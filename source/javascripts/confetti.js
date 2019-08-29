@@ -23,7 +23,7 @@ const CONFETTI_DEFAULT_CONFIG = {
 class Confetti {
 
   constructor(config) {
-    this.config = Object.assign({}, CONFETTI_DEFAULT_CONFIG);
+    this.config = {...CONFETTI_DEFAULT_CONFIG};
     this.setConfig(config);
 
     this.isAlive = true;
@@ -90,7 +90,7 @@ class Confetti {
 
     const x = this.simplex.noise(
       this.config.simplexXOffset + t / zoom,
-      this.config.simplexYOffset
+      this.config.simplexYOffset,
     );
 
     const lateralOscillation = new Vector2(x, 0);
