@@ -5,6 +5,7 @@ import {
   Ticker,
   Util,
   Vector2,
+  Viewport,
 } from '@nekobird/rocket';
 
 import Confetti from './confetti';
@@ -49,12 +50,15 @@ const CONFETTI_CANNON_DEFAULT_CONFIG = {
 class ConfettiCannon {
 
   constructor(config) {
-    this.config = Object.assign({}, CONFETTI_CANNON_DEFAULT_CONFIG);
+    this.config = {...CONFETTI_CANNON_DEFAULT_CONFIG};
     this.setConfig(config);
 
     this.isActive = false;
+
     this.confetti;
+
     this.ticker;
+
     this.updateCount = 0;
   }
 
@@ -178,7 +182,7 @@ class ConfettiCannon {
   }
 
   setCanvasDimensionToWindow() {
-    this.setCanvasDimension(window.innerWidth, window.innerHeight);
+    this.setCanvasDimension(Viewport.width, Viewport.height);
   }
 
   setCanvasDimension(width, height) {

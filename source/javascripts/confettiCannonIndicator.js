@@ -1,19 +1,25 @@
 import {
   Num,
   Vector2,
+  Viewport,
 } from '@nekobird/rocket';
 
 const CONFETTI_CANNON_INDICATOR_DEFAULT_CONFIG = {
   canvasElement: undefined,
+
   angle: 0,
+
   arc: Math.PI / 4,
+
   power: 10,
+
   getCannonPosition: () => new Vector2(),
 };
 
 class ConfettiCannonIndicator {
   constructor(config) {
-    this.config = Object.assign({}, CONFETTI_CANNON_INDICATOR_DEFAULT_CONFIG);
+    this.config = {...CONFETTI_CANNON_INDICATOR_DEFAULT_CONFIG};
+
     this.setConfig(config);
 
     this.context = this.config.canvasElement.getContext('2d');
@@ -30,8 +36,8 @@ class ConfettiCannonIndicator {
   updateCanvas() {
     const { canvasElement } = this.config;
 
-    canvasElement.width = window.innerWidth;
-    canvasElement.height = window.innerHeight;
+    canvasElement.width = Viewport.width;
+    canvasElement.height = Viewport.height;
   }
 
   display() {
