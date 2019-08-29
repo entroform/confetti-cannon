@@ -56,7 +56,7 @@ class Confetti {
 
     if (friction !== 0) {
       const force = this.velocity
-        .clone
+        .clone()
         .multiply(-1)
         .normalize()
         .multiply(friction);
@@ -73,7 +73,7 @@ class Confetti {
     const dragMagnitude = dragCoefficient * speed * speed;
 
     const force = this.velocity
-      .clone
+      .clone()
       .multiply(-1)
       .normalize()
       .multiply(dragMagnitude);
@@ -82,15 +82,17 @@ class Confetti {
   }
 
   applyLateralEntropy(t) {
-    const zoom = this.config.simplexZoomMultiplier;
+    const { simplexZoomMultiplier, simplexXOffset, simplexYOffset } = this.config;
+
+    const zoom = simplexZoomMultiplier;
 
     if (zoom === 0) {
       zoom = 1;
     }
 
     const x = this.simplex.noise(
-      this.config.simplexXOffset + t / zoom,
-      this.config.simplexYOffset,
+      simplexXOffset + t / zoom,
+      simplexYOffset,
     );
 
     const lateralOscillation = new Vector2(x, 0);
@@ -118,17 +120,19 @@ class Confetti {
     this.acceleration.multiply(0);
 
     this.angleVelocity += this.angleAcceleration;
-    this.angleVelocity = Num.constrain(this.angleVelocity, [-0.1, 0.1]);
+    this.angleVelocity = Num.clamp(this.angleVelocity, [-0.1, 0.1]);
 
     this.angle += this.angleVelocity;
   }
 
   draw(context, m) {
+    const { width, height, color } = this.config;
+
     const x = this.position.x * m;
     const y = this.position.y * m;
 
-    const w = this.config.width * m;
-    const h = this.config.height * m;
+    const w = width * m;
+    const h = height * m;
 
     context.save();
 
@@ -142,7 +146,7 @@ class Confetti {
     context.lineTo(x + w / 2, y - h / 2);
     context.lineTo(x + w / 2, y + h / 2);
     context.lineTo(x - w / 2, y + h / 2);
-    context.fillStyle = this.config.color;
+    context.fillStyle = color;
     context.fill();
 
     context.restore();

@@ -29,6 +29,6 @@
     "autoprefixer": "^9.6.1",
     "cssnano": "^4.1.10",
     "parcel-bundler": "^1.12.3",
-    "sass": "^1.22.7"
+    "sass": "^1.22.10"
   }
 }

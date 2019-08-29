@@ -1,10 +1,9 @@
 import {
-  Animation,
   DOMUtil,
   Num,
   Point,
-  Util,
   Ticker,
+  Util,
   Vector2,
 } from '@nekobird/rocket';
 
@@ -55,7 +54,7 @@ class ConfettiCannon {
 
     this.isActive = false;
     this.confetti;
-    this.animation;
+    this.ticker;
     this.updateCount = 0;
   }
 
@@ -120,7 +119,7 @@ class ConfettiCannon {
     } = this.config;
 
     return {
-      color: Util.randomChoice(colorChoices),
+      color: Util.randomChoice(...colorChoices),
 
       life: Num.transform(Math.random(), 1, lifeSpanRange),
 
@@ -167,11 +166,7 @@ class ConfettiCannon {
       const { parentElement } = this.config;
 
       if (DOMUtil.isHTMLElement(parentElement) === true) {
-        if (parentElement.childElementCount > 0) {
-          parentElement.insertBefore(this.canvasElement, parentElement.childNodes[0]);
-        } else {
-          parentElement.appendChild(this.canvasElement);
-        }
+        DOMUtil.prependChild(parentElement, this.canvasElement);
       }
 
       const result = this.config.updateFirePosition(this);
@@ -209,7 +204,7 @@ class ConfettiCannon {
 
   begin() {
     if (this.isActive === true) {
-      this.startAnimation();
+      this.startTicker();
 
       if (this.confetti.length === 0) {
         this.end();
@@ -217,21 +212,21 @@ class ConfettiCannon {
     }
   }
 
-  startAnimation() {
+  startTicker() {
     this.updateCount = 0;
 
     this.config.beforeFire(this);
 
-    this.animation = new Animation({
-      timeUnit: 'ms',
-      delay: this.config.delay,
-      duration: 200,
-      numberOfIterations: 'infinite',
-      onStart: () => this.config.onFire(this),
-      onTick: t => this.update(),
-    });
-
-    this.animation.play();
+    setTimeout(() => {
+      this.ticker = new Ticker({
+        durationInSeconds: 0.2,
+        loopForever: true,
+        onStart: () => this.config.onFire(this),
+        onTick: () => this.update(),
+      });
+  
+      this.ticker.start();
+    }, this.config.delay);
   }
 
   update() {
@@ -280,7 +275,7 @@ class ConfettiCannon {
   }
 
   end() {
-    this.animation.stop();
+    this.ticker.stop();
 
     this.clearCanvas();
 

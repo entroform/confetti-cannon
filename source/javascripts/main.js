@@ -10,7 +10,12 @@ import {
 import ConfettiCannon from './confettiCannon';
 
 const getElementCenterVector = element => {
-  const { left, top, width, height } = element.getBoundingClientRect();
+  const {
+    left,
+    top,
+    width,
+    height,
+  } = element.getBoundingClientRect();
 
   return new Vector2(
     left + width / 2,
@@ -164,7 +169,6 @@ const sc_maxPower = new DuoKnobSlider({
     const { value } = slider;
     
     confettiCannon.config.powerRange = value;
-    console.log(value);
 
     confettiCannonIndicator.config.power = value[1];
     confettiCannonIndicator.display();

@@ -107,7 +107,7 @@ class ConfettiCannonIndicator {
       this.context.arc(
         position.x,
         position.y,
-        Num.modulate(power, [10, 150], [100, 500], true),
+        Num.transform(power, [10, 150], [100, 500], true),
         0,
         Math.PI * 2,
       );
@@ -115,7 +115,7 @@ class ConfettiCannonIndicator {
       this.context.arc(
         position.x,
         position.y,
-        Num.modulate(power, [10, 150], [100, 500], true),
+        Num.transform(power, [10, 150], [100, 500], true),
         Num.cycle(angle - arc / 2, Math.PI * 2),
         Num.cycle(angle + arc / 2, Math.PI * 2),
       );
