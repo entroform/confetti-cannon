@@ -120,7 +120,7 @@ class Confetti {
     this.acceleration.multiply(0);
 
     this.angleVelocity += this.angleAcceleration;
-    this.angleVelocity = Num.clamp(this.angleVelocity, [-0.1, 0.1]);
+    this.angleVelocity = Num.clamp(this.angleVelocity, -0.1, 0.1);
 
     this.angle += this.angleVelocity;
   }
