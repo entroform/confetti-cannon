@@ -135,6 +135,7 @@ class ConfettiCannonIndicator {
   listen() {
     window.addEventListener('resize', () => {
       this.updateCanvas();
+
       this.display();
     });
   }

@@ -13,37 +13,54 @@ import Confetti from './confetti';
 const CONFETTI_CANNON_DEFAULT_CONFIG = {
   // Canvas Settings
   parentElement: null,
+
   resolutionMultiplier: 1,
+
   zIndex: 0,
+
   prepareCanvas: (canvas, context) => {},
 
   // Confetti settings
   colorChoices: ['#80EAFF', '#FF0055', '#00FFAA', '#FFFF00'],
+
   widthRange: [2, 8],
+
   heightRange: [2, 10],
+
   lifeSpanRange: [100, 200],
 
   // Cannon Settings
   // Warning: firePosition is relative to canvas.
   firePosition: new Vector2(),
+
   updateFirePosition: () => false,
 
   numberOfConfetti: 500,
+
   delay: 0,
+
   angle: (3 * Math.PI) / 2,
+
   blastArc: Math.PI / 2,
+
   powerRange: [2, 40],
 
   // Environment Settings
   gravity: 1,
+
   frictionCoefficient: 0.1,
+ 
   dragCoefficient: 0,
+
   simplexZoomMultiplierRange: [80, 100],
+
   simplexOffsetMultiplier: 100,
 
   // Hooks
   beforeFire: () => {},
+
   onFire: () => {},
+
   onComplete: () => {},
 };
 
@@ -228,7 +245,7 @@ class ConfettiCannon {
         onStart: () => this.config.onFire(this),
         onTick: () => this.update(),
       });
-  
+
       this.ticker.start();
     }, this.config.delay);
   }
@@ -284,6 +301,7 @@ class ConfettiCannon {
     this.clearCanvas();
 
     this.canvasElement.remove();
+
     this.canvasElement = undefined;
 
     this.confetti = [];

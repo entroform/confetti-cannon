@@ -24,6 +24,7 @@ class Confetti {
 
   constructor(config) {
     this.config = {...CONFETTI_DEFAULT_CONFIG};
+
     this.setConfig(config);
 
     this.isAlive = true;
@@ -154,6 +155,7 @@ class Confetti {
 
   die() {
     this.life = 0;
+
     this.isAlive = false;
   }
 }
