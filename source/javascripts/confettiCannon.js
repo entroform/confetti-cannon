@@ -48,9 +48,9 @@ const CONFETTI_CANNON_DEFAULT_CONFIG = {
 };
 
 class ConfettiCannon {
-
   constructor(config) {
     this.config = {...CONFETTI_CANNON_DEFAULT_CONFIG};
+
     this.setConfig(config);
 
     this.isActive = false;
