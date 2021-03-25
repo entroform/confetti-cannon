@@ -1,81 +1,59 @@
-import {
-  DOMUtil,
-  Num,
-  Point,
-  Ticker,
-  Util,
-  Vector2,
-  Viewport,
-} from '@nekobird/rocket';
-
 import Confetti from './confetti';
+import Ticker from './ticker';
+import {
+  generateRandomInteger,
+  isHTMLElement,
+  prependChild,
+  transform,
+} from './utils';
+import Vector2 from './vector2';
+import Viewport from './viewport';
 
 const CONFETTI_CANNON_DEFAULT_CONFIG = {
   // Canvas Settings
   parentElement: null,
-
   resolutionMultiplier: 1,
-
   zIndex: 0,
-
   prepareCanvas: (canvas, context) => {},
 
   // Confetti settings
   colorChoices: ['#80EAFF', '#FF0055', '#00FFAA', '#FFFF00'],
-
   widthRange: [2, 8],
-
   heightRange: [2, 10],
-
   lifeSpanRange: [100, 200],
 
   // Cannon Settings
   // Warning: firePosition is relative to canvas.
   firePosition: new Vector2(),
-
   updateFirePosition: () => false,
-
   numberOfConfetti: 500,
-
   delay: 0,
-
   angle: (3 * Math.PI) / 2,
-
   blastArc: Math.PI / 2,
-
   powerRange: [2, 40],
 
   // Environment Settings
   gravity: 1,
-
   frictionCoefficient: 0.1,
- 
   dragCoefficient: 0,
-
   simplexZoomMultiplierRange: [80, 100],
-
   simplexOffsetMultiplier: 100,
 
   // Hooks
   beforeFire: () => {},
-
   onFire: () => {},
-
   onComplete: () => {},
 };
 
 class ConfettiCannon {
   constructor(config) {
-    this.config = {...CONFETTI_CANNON_DEFAULT_CONFIG};
-
+    this.config = { ...CONFETTI_CANNON_DEFAULT_CONFIG };
     this.setConfig(config);
 
     this.isActive = false;
 
     this.confetti;
-
     this.ticker;
-
     this.updateCount = 0;
   }
 
@@ -99,16 +77,22 @@ class ConfettiCannon {
 
   fire() {
     this.setup();
+    
+    if (!this.isActive) {
+      return;
+    }
 
-    this.begin();
+    this.startTicker();
+
+    if (this.confetti.length === 0) {
+      this.end();
+    }
   }
 
   setup(callback) {
-    if (this.isActive === false) {
+    if (!this.isActive) {
       this.isActive = true;
-
       this.createCanvas(callback);
-
       this.populate();
     }
   }
@@ -118,7 +102,7 @@ class ConfettiCannon {
 
     for (let i = 0; i < this.config.numberOfConfetti; i++) {
       const config = this.generateConfettiConfig();
-
+      console.log(config);
       this.confetti.push(new Confetti(config));
     }
   }
@@ -140,61 +124,55 @@ class ConfettiCannon {
     } = this.config;
 
     return {
-      color: Util.randomChoice(...colorChoices),
-
-      life: Num.transform(Math.random(), 1, lifeSpanRange),
-
+      color: colorChoices[generateRandomInteger(0, colorChoices.length - 1)],
+      life: transform(Math.random(), 1, lifeSpanRange),
       startPosition: new Vector2().equals(firePosition),
-
       startVelocity: new Vector2(0, 1)
         .rotateTo(angle)
         .rotateBy(
-          Num.transform(Math.random(), 1, [-blastArc / 2, blastArc / 2]),
+          transform(Math.random(), 1, [-blastArc / 2, blastArc / 2]),
         )
-        .multiply(Num.transform(Math.random(), 1, powerRange)),
+        .multiply(transform(Math.random(), 1, powerRange)),
 
-      width: Num.transform(Math.random(), 1, widthRange),
-
-      height: Num.transform(Math.random(), 1, heightRange),
-
+      width: transform(Math.random(), 1, widthRange),
+      height: transform(Math.random(), 1, heightRange),
       dragCoefficient: dragCoefficient,
-
-      simplexZoomMultiplier: Num.transform(Math.random(), 1, simplexZoomMultiplierRange),
-
+      simplexZoomMultiplier: transform(Math.random(), 1, simplexZoomMultiplierRange),
       simplexXOffset: Math.random() * simplexOffsetMultiplier,
-
       simplexYOffset: Math.random() * simplexOffsetMultiplier,
     };
   }
 
   // 9) Create canvas element and calculate offset. Takes in a callback (begin method).
   createCanvas() {
-    if (typeof this.canvasElement === 'undefined') {
-      this.canvasElement = document.createElement('CANVAS');
+    if (this.canvasElement) {
+      return;
+    }
 
-      this.canvasElement.style.position = 'fixed';
-      this.canvasElement.style.zIndex = this.config.zIndex.toString();
+    this.canvasElement = document.createElement('CANVAS');
 
-      this.canvasElement.style.left = '0px';
-      this.canvasElement.style.top = '0px';
+    this.canvasElement.style.position = 'fixed';
+    this.canvasElement.style.zIndex = this.config.zIndex.toString();
 
-      this.setCanvasDimensionToWindow();
+    this.canvasElement.style.left = '0px';
+    this.canvasElement.style.top = '0px';
 
-      this.config.prepareCanvas(this.canvasElement, this);
+    this.setCanvasDimensionToWindow();
 
-      this.context = this.canvasElement.getContext('2d');
+    this.config.prepareCanvas(this.canvasElement, this);
 
-      const { parentElement } = this.config;
+    this.context = this.canvasElement.getContext('2d');
 
-      if (DOMUtil.isHTMLElement(parentElement) === true) {
-        DOMUtil.prependChild(parentElement, this.canvasElement);
-      }
+    const { parentElement } = this.config;
 
-      const result = this.config.updateFirePosition(this);
+    if (isHTMLElement(parentElement) === true) {
+      prependChild(parentElement, this.canvasElement);
+    }
 
-      if (Point.isPointLike(result) === true) {
-        this.config.firePosition.equals(result);
-      }
+    const result = this.config.updateFirePosition(this);
+
+    if (Vector2.isPoint(result)) {
+      this.config.firePosition.equals(result);
     }
   }
 
@@ -221,16 +199,6 @@ class ConfettiCannon {
     const y = elementRect.top - canvasRect.top + elementRect.height / 2;
 
     return new Vector2(x, y);
-  }
-
-  begin() {
-    if (this.isActive === true) {
-      this.startTicker();
-
-      if (this.confetti.length === 0) {
-        this.end();
-      }
-    }
   }
 
   startTicker() {
@@ -261,7 +229,6 @@ class ConfettiCannon {
 
     for (let i = 0; i < this.confetti.length; i++) {
       const confetti = this.confetti[i];
-
       if (confetti.isAlive === true) {
         confetti.applyFriction(frictionCoefficient);
         confetti.applyDrag();
@@ -286,7 +253,7 @@ class ConfettiCannon {
   }
 
   clearCanvas() {
-    if (typeof this.canvasElement === 'object') {
+    if (this.canvasElement) {
       this.context.clearRect(
         0, 0,
         this.canvasElement.width,
@@ -296,18 +263,13 @@ class ConfettiCannon {
   }
 
   end() {
+    console.log('This ends');
     this.ticker.stop();
-
     this.clearCanvas();
-
     this.canvasElement.remove();
-
-    this.canvasElement = undefined;
-
+    this.canvasElement = null;
     this.confetti = [];
-
     this.isActive = false;
-
     this.config.onComplete();
   }
 }

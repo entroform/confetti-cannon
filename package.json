@@ -1,7 +1,7 @@
 {
   "name": "confetti-cannon",
   "version": "1.0.0",
-  "description": "",
+  "description": "A fun confetti simulation.",
   "keywords": [],
   "repository": {
     "type": "git",
@@ -12,23 +12,14 @@
   "main": "source/main.js",
   "scripts": {
     "build": "rm -r ./build; parcel build ./source/index.html --out-dir build --public-url ./",
-    "prettier": "prettier --write 'source/**/*.js'",
-    "start": "parcel ./source/index.html",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "dependencies": {
-    "@nekobird/controls": "0.0.5",
-    "@nekobird/rocket": "0.0.135"
+    "start": "parcel ./source/index.html"
   },
   "devDependencies": {
-    "@babel/core": "^7.8.4",
-    "@babel/plugin-transform-runtime": "^7.8.3",
-    "@babel/plugin-transform-typescript": "^7.8.3",
-    "@babel/preset-env": "^7.8.4",
-    "@babel/preset-typescript": "^7.8.3",
-    "autoprefixer": "^9.7.4",
-    "cssnano": "^4.1.10",
+    "@babel/core": "^7.13.10",
     "parcel-bundler": "^1.12.4",
-    "sass": "^1.25.0"
+    "sass": "^1.32.8"
+  },
+  "dependencies": {
+    "@nekobird/controls": "^0.0.5"
   }
 }
