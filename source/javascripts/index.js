@@ -53,8 +53,7 @@ const confettiCannon = new ConfettiCannon({
 triggerElement.addEventListener('click', () => confettiCannon.fire());
 
 window.addEventListener('resize', () => {
-  const { firePosition } = confettiCannon.config;
-  firePosition.equals(getElementCenterVector(triggerElement));
+  confettiCannon.config.firePosition.equals(getElementCenterVector(triggerElement));
 });
 
 // 
