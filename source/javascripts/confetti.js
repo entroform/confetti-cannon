@@ -1,8 +1,7 @@
 import {
-  Num,
-  Vector2,
-} from '@nekobird/rocket';
-
+  clamp,
+} from './utils';
+import Vector2 from './vector2';
 import SimplexNoise from './noise';
 
 const CONFETTI_DEFAULT_CONFIG = {
@@ -20,11 +19,11 @@ const CONFETTI_DEFAULT_CONFIG = {
   simplexYOffset: 0,
 };
 
-class Confetti {
-
+export default class Confetti {
   constructor(config) {
-    this.config = {...CONFETTI_DEFAULT_CONFIG};
+    this.life = 0;
 
+    this.config = { ...CONFETTI_DEFAULT_CONFIG };
     this.setConfig(config);
 
     this.isAlive = true;
@@ -67,43 +66,30 @@ class Confetti {
   }
 
   applyDrag() {
-    const speed = this.velocity.magnitude;
-
+    const speed = this.velocity.magnitude();
     const { dragCoefficient } = this.config;
-
     const dragMagnitude = dragCoefficient * speed * speed;
-
     const force = this.velocity
       .clone()
       .multiply(-1)
       .normalize()
       .multiply(dragMagnitude);
-
     this.applyForce(force);
   }
 
   applyLateralEntropy(t) {
     const { simplexZoomMultiplier, simplexXOffset, simplexYOffset } = this.config;
-
     const zoom = simplexZoomMultiplier;
-
     if (zoom === 0) {
       zoom = 1;
     }
-
-    const x = this.simplex.noise(
-      simplexXOffset + t / zoom,
-      simplexYOffset,
-    );
-
+    const x = this.simplex.noise(simplexXOffset + t / zoom, simplexYOffset);
     const lateralOscillation = new Vector2(x, 0);
-
     this.applyForce(lateralOscillation);
   }
 
   applyForce(force) {
     force.divide(this.config.mass);
-
     this.acceleration.add(force);
   }
 
@@ -113,15 +99,12 @@ class Confetti {
     if (this.life <= 0) {
       this.die();
     }
-
-    this.velocity
-      .add(this.acceleration)
-      .limit(this.config.maximumSpeed);
+    this.velocity.add(this.acceleration).limit(this.config.maximumSpeed);
     this.position.add(this.velocity);
     this.acceleration.multiply(0);
 
     this.angleVelocity += this.angleAcceleration;
-    this.angleVelocity = Num.clamp(this.angleVelocity, -0.1, 0.1);
+    this.angleVelocity = clamp(this.angleVelocity, -0.1, 0.1);
 
     this.angle += this.angleVelocity;
   }
@@ -155,9 +138,7 @@ class Confetti {
 
   die() {
     this.life = 0;
-
     this.isAlive = false;
   }
 }
 
-export default Confetti;

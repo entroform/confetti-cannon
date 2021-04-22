@@ -4,10 +4,8 @@
 //
 // Sean McCullough banksean@gmail.com
 
-/**
- * You can pass in a random number generator object if you like.
- * It is assumed to have a random() method.
- */
+// You can pass in a random number generator object if you like.
+// It is assumed to have a random() method.
 var SimplexNoise = function(r) {
   if (r == undefined) r = Math;
   this.grad3 = [

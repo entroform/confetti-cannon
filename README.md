@@ -1,3 +1,3 @@
 # 🎉 confetti-cannon
 
-Canvas confetti explosion animation.
+Canvas confetti cannon animation.
