@@ -5,21 +5,22 @@
   "keywords": [],
   "repository": {
     "type": "git",
-    "url": "git://github.com/nekobird/confetti-cannon.git"
+    "url": "git://github.com/entroform/confetti-cannon.git"
   },
   "license": "ISC",
   "author": "Andrew Prasetya",
-  "main": "source/main.js",
+  "main": "src/main.js",
   "scripts": {
-    "build": "rm -r ./build; parcel build ./source/index.html --out-dir build --public-url ./",
-    "start": "parcel ./source/index.html"
+    "build": "rm -r ./build; parcel build ./src/index.html --out-dir build --public-url ./",
+    "start": "parcel ./src/index.html"
   },
   "devDependencies": {
-    "@babel/core": "^7.13.10",
+    "@babel/core": "^7.15.0",
     "parcel-bundler": "^1.12.4",
-    "sass": "^1.32.8"
+    "sass": "^1.38.1"
   },
   "dependencies": {
-    "@nekobird/controls": "^0.0.5"
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
   }
 }
